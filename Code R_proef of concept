@@ -1,0 +1,148 @@
+#GERMAN ON THE MOON
+
+# Charger la bibliothèque tidyverse
+library(tidyverse)
+
+#1. les valeurs de base du jeux
+#Date de début du jeu
+initi_datedebut<- "1943-09-01"
+#Date de fin du jeu
+initi_datedefin <- "1955-12-31"
+#Nombre de projet et de taches
+nombretache<- 50
+
+#1. Création du tableau evenement qui va regrouper toute les données jour après jour ----
+
+# Créer un vecteur de 50 dates réparties uniformément entre le 1er septembre 1943 et le 31 décembre 1955
+dates <- seq(as.Date(initi_datedebut), as.Date(initi_datedefin), length.out = nombretache)
+
+# Créer un data frame avec les colonnes spécifiées
+TABLEAU_evenement <- tibble(
+  Date = dates,
+  Equipements = rep(0, nombretache),
+  Eau = rep(0, nombretache),
+  Nourriture = rep(0, nombretache),
+  Oxygène = rep(0, nombretache),
+  `Nombre de budozzer` = rep(0, nombretache),
+  `Nombre de camions` = rep(0, nombretache),
+  `Surface habitation` = rep(0, nombretache),
+  `Surface biodome` = rep(0, nombretache),
+  `Surface atelier` = rep(0, nombretache),
+  `Surface base` = rep(0, nombretache),
+  `Nombre soldat` = rep(0, nombretache),
+  `Adhésion idéologiques soldat` = rep(0, nombretache),
+  `Adhesion idéologique offier` = rep(0, nombretache),
+  `Adhésion idéologique civils` = rep(0, nombretache),
+  `Nombre officiers` = rep(0, nombretache),
+  `Nombre non combattants` = rep(0, nombretache),
+  `Nombre soldats` = rep(0, nombretache),
+  `Tonnes d'essences` = rep(0, nombretache),
+  `nombre de V2 prete au décolage` = rep(0, nombretache),
+  `Niveau détection depuis la terre par sovietique` = rep(0, nombretache),
+  `Niveau détection depuis la terre par usa` = rep(0, nombretache),
+  `Nombre armes super puissant pour conquerir la terre` = rep(0, nombretache),
+  `KWH produit ce mois` = rep(0, nombretache),
+  `Tonnes de petrole` = rep(0, nombretache),
+  `Tonnes de gaz` = rep(0, nombretache),
+  `Tonnes de charbon` = rep(0, nombretache),
+  `Tonnes d'uranium` = rep(0, nombretache)
+)
+
+#2.1 Creation du tableau actions avec les taches et les projets
+
+# Création des vecteurs pour chaque colonne
+projet_taches <- c("Projet 1",
+                   "Projet 2",
+                   "Projet 3",
+                   "Projet 4")
+categorie <- c(0,
+               0,
+               0,
+               0)
+titre <- c("Titre 1",
+           "Titre 2",
+           "Titre 3",
+           "Titre 4")
+debut_date_validite <- as.Date(c(initi_datedebut,
+                                 initi_datedebut,
+                                 initi_datedebut,
+                                 initi_datedebut))
+fin_date_validite <- as.Date(c(initi_datedefin,
+                               initi_datedefin,
+                               initi_datedefin,
+                               initi_datedefin))
+consequence <- c("Conséquence 1", 
+                 "Conséquence 2", 
+                 "Conséquence 3", 
+                 "Conséquence 4")
+conditions <- c("Conditions 1", 
+                "Conditions 2",
+                "Conditions 3",
+                "Conditions 4")
+aleatoire <- c(1.00,
+               1.00,
+               1.00,
+               1.00)
+
+
+# Création du dataframe
+TABLEAU_ACTIONS <- data.frame(Projet_Taches = projet_taches,
+                 Categorie = categorie,
+                 Titre = titre,
+                 Debut_Date_Validite = debut_date_validite,
+                 Fin_Date_Validite = fin_date_validite,
+                 Consequence = consequence,
+                 Conditions = conditions,
+                 Aleatoire = aleatoire)
+
+
+TABLEAU_ACTIONS
+
+#2.2 code pour rajouter de taches et des projets ----
+# Création d'un vecteur pour stocker les valeurs de la nouvelle ligne
+nouvelle_ligne <- vector(mode = "list", length = ncol(TABLEAU_ACTIONS))
+
+
+
+#3 Création du formulaire de question pour le joueur----
+# Création d'un vecteur pour stocker les réponses de l'utilisateur
+joueur <- character(length(titre))
+# Boucle pour demander à l'utilisateur de saisir une réponse pour chaque ligne du tableau
+for (i in 1:nrow(TABLEAU_ACTIONS)) {
+  message(paste("Que voulez-vous faire avec la tâche '", TABLEAU_ACTIONS$Titre[i], "' ? (faire = 1 /ne jamais faire = 2/ attendre = 3)"))
+  joueur[i] <- readline(prompt = "")
+}
+
+#eccrire les réponse
+
+#faire tourner la suite du code
+
+
+# Ajout de la colonne "joueur" au data frame
+TABLEAU_ACTIONS$joueur <- joueur
+
+# Affichage du data frame mis à jour
+TABLEAU_ACTIONS
+
+
+
+
+
+# Demander à l'utilisateur d'entrer une valeur 
+print("Entrez une valeur :")
+x <- as.numeric(readline())
+
+# Définir une fonction qui utilise la valeur entrée 
+f <- function() {
+  resultat <- x * 2
+  print(resultat)
+}
+
+# Exécuter la fonction
+f()
+
+# Demander à l'utilisateur d'entrer une nouvelle valeur
+# et ré-exécuter la fonction
+print("Entrez une nouvelle valeur :") 
+x <- as.numeric(readline()) 
+f()
