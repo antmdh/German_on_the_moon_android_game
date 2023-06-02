@@ -1,6 +1,11 @@
 #GERMAN ON THE MOON
 #TO DO Le systeme des projets fonctionne (mais il faut travailler la base de données, voir si je peux demanderà chat GPT)
 #Je dois faire le programme des sous taches et rajouter des calculs 
+#stavaza 02 06 2023 : c'est une approche intéressante car elle change completement du projet de départ
+#on doit choisir dans une liste de projet au lieu de choisir oui non sur un projet
+#Les taches sont continues et donc on ne doit pas introduire de oui non pour une tache, on peut rajouter un chiffre du nombre de gens impliqué
+#mais c'est pas très chouette, demande des controle en plus et finalement c'est difficile de choisir.
+
 
 # Charger la bibliothèque tidyverse
 library(tidyverse)
@@ -14,20 +19,23 @@ library(ggridges)
 library(stringr)
 library(cowplot)
 library(scales)
-
+library(lubridate)
 
 #1. Importation du tableau evenement qui va regrouper toute les données jour après jour ----
 
 
 
 TABLEAU_EVENEMENT <- read.xlsx("C:/Users/u99amo/Downloads/GotM_TABLEAU_EVENEMENT.xlsx", sheet = "Feuil1", colNames = TRUE, detectDates = TRUE )
+
+TABLEAU_EVENEMENT<-TABLEAU_EVENEMENT%>%mutate(nbrdecivilautravail =0)
+
 #2 Creation du tableau actions avec les taches et les projets
 
 TABLEAU_ACTIONS<- read.xlsx("C:/Users/u99amo/Downloads/GotM_tableau_actions.xlsx", sheet = "Feuil1", colNames = TRUE, detectDates = TRUE )
 
-TABLEAU_ACTIONS$joueur<-as.integer(TABLEAU_ACTIONS$joueur)
-TABLEAU_ACTIONS$Temps._joueurs<-as.Date (TABLEAU_ACTIONS$Temps._joueurs)
-TABLEAU_ACTIONS%>%glimpse()
+
+
+
 
 #choixdelaligne dans tableau evenement à remplacer par une formule 
 i<-1
@@ -75,7 +83,7 @@ choix_titre <- readline(prompt="Veuillez choisir un titre sans les guillements :
 # Vérifier si le titre choisi existe dans le dataframe
 if (choix_titre %in% TABLEAU_ACTIONS$titre) {
   # Rajouter le projet suivi ainsi que la date
-  info_joueur <- 1
+  info_joueur <- i
   
   
   # Mettre à jour la colonne "joueur" pour la ligne choisie
@@ -86,50 +94,71 @@ if (choix_titre %in% TABLEAU_ACTIONS$titre) {
   print("Le titre choisi n'existe pas dans le dataframe.")
 }
 
-#3.B On lui présente 
+#3.B On lui présente les sous taches du projet choisis et il doit mettre des valeurs pour chacune 
+
+categoriesoustache<- TABLEAU_ACTIONS %>%   
+  filter(`projet/taches` == "Projet") %>%
+  filter(joueur == i)%>%pull(catégorie)
+
+questionsoustache<- TABLEAU_ACTIONS %>%   
+  filter(`projet/taches` == "tache") %>%
+  filter(catégorie == categoriesoustache)%>%select(titre)
+
+
+print(questionsoustache)
+
+# Demander à l'utilisateur de choisir un titre
+choix_tache1 <- readline(prompt="veuilliez indiquez le nombre d'homme pour cette mission : ")
+
+### PAUSE ECRIRE LA REPONSE
+
+choix_tache1<-as.integer(choix_tache1)
+
+TABLEAU_EVENEMENT$nbrdecivilautravail[i+1]<-TABLEAU_EVENEMENT$nbrdecivilautravail[i+1]+choix_tache1
 
 
 
+TABLEAU_EVENEMENT$Unites_Population[i+1]<-TABLEAU_EVENEMENT$Unites_Population[i]-choix_tache1
 
 
-# Création d'un vecteur pour stocker les réponses de l'utilisateur
-joueur <- character(length(titre))
-# Boucle pour demander à l'utilisateur de saisir une réponse pour chaque ligne du tableau
-for (i in 1:nrow(TABLEAU_ACTIONS_projet)) {
-  message(paste("Que voulez-vous faire avec la tâche '", TABLEAU_ACTIONS_projet$titre[i], "' ? (faire = 1 /ne jamais faire = 2/ attendre = 3)"))
-  joueur[i] <- readline(prompt = "")
-}
-
-#eccrire les réponse
-
-#faire tourner la suite du code
-
-
-# Ajout de la colonne "joueur" au data frame
-TABLEAU_ACTIONS$joueur <- joueur
-
-# Affichage du data frame mis à jour
-TABLEAU_ACTIONS
-
-
-
-
-
-# Demander à l'utilisateur d'entrer une valeur 
-print("Entrez une valeur :")
-x <- as.numeric(readline())
-
-# Définir une fonction qui utilise la valeur entrée 
-f <- function() {
-  resultat <- x * 2
-  print(resultat)
-}
-
-# Exécuter la fonction
-f()
-
-# Demander à l'utilisateur d'entrer une nouvelle valeur
-# et ré-exécuter la fonction
-print("Entrez une nouvelle valeur :") 
-x <- as.numeric(readline()) 
-f()
+# # Création d'un vecteur pour stocker les réponses de l'utilisateur
+# joueur <- character(length(titre))
+# # Boucle pour demander à l'utilisateur de saisir une réponse pour chaque ligne du tableau
+# for (i in 1:nrow(TABLEAU_ACTIONS_projet)) {
+#   message(paste("Que voulez-vous faire avec la tâche '", TABLEAU_ACTIONS_projet$titre[i], "' ? (faire = 1 /ne jamais faire = 2/ attendre = 3)"))
+#   joueur[i] <- readline(prompt = "")
+# }
+# 
+# #eccrire les réponse
+# 
+# #faire tourner la suite du code
+# 
+# 
+# # Ajout de la colonne "joueur" au data frame
+# TABLEAU_ACTIONS$joueur <- joueur
+# 
+# # Affichage du data frame mis à jour
+# TABLEAU_ACTIONS
+# 
+# 
+# 
+# 
+# 
+# # Demander à l'utilisateur d'entrer une valeur 
+# print("Entrez une valeur :")
+# x <- as.numeric(readline())
+# 
+# # Définir une fonction qui utilise la valeur entrée 
+# f <- function() {
+#   resultat <- x * 2
+#   print(resultat)
+# }
+# 
+# # Exécuter la fonction
+# f()
+# 
+# # Demander à l'utilisateur d'entrer une nouvelle valeur
+# # et ré-exécuter la fonction
+# print("Entrez une nouvelle valeur :") 
+# x <- as.numeric(readline()) 
+# f()
