@@ -1,7 +1,6 @@
 #GERMAN ON THE MOON
-#TO DO je suis au point 3 ou je dois filter les donnes pour voir si je peux proposer tout les projets ou pas. 
-#remaraque importante, il est temps de verifier la qualité des données et supprimer tout les espaces et accent
-#j'ai aussi un soucis sur le fait que je dois faire une pause dans le programme pour rajouter une valeur, cela va finir par poser probleme
+#TO DO Le systeme des projets fonctionne (mais il faut travailler la base de données, voir si je peux demanderà chat GPT)
+#Je dois faire le programme des sous taches et rajouter des calculs 
 
 # Charger la bibliothèque tidyverse
 library(tidyverse)
@@ -16,82 +15,12 @@ library(stringr)
 library(cowplot)
 library(scales)
 
-#1. les valeurs de base du jeux
-#Date de début du jeu
-initi_datedebut<- "1943-09-01"
-#Date de fin du jeu
-initi_datedefin <- "1955-12-31"
-#Nombre de projet et de taches
-nombretache<- 75
 
-#1. Création du tableau evenement qui va regrouper toute les données jour après jour ----
+#1. Importation du tableau evenement qui va regrouper toute les données jour après jour ----
 
-# Créer un vecteur des dates réparties uniformément entre le 1er septembre 1943 et le 31 décembre 1955
-dates <- seq(as.Date(initi_datedebut), as.Date(initi_datedefin), length.out = nombretache)
 
-# Créer un data frame avec les colonnes spécifiées
-TABLEAU_evenement <- tibble(
-  Date = dates,
-  Equipements = rep(0, nombretache),
-  Eau = rep(0, nombretache),
-  Nourriture = rep(0, nombretache),
-  Oxygène = rep(0, nombretache),
-  `Nombre de budozzer` = rep(0, nombretache),
-  `Nombre de camions` = rep(0, nombretache),
-  `Surface habitation` = rep(0, nombretache),
-  `Surface biodome` = rep(0, nombretache),
-  `Surface atelier` = rep(0, nombretache),
-  `Surface base` = rep(0, nombretache),
-  `Nombre personne` = rep(0, nombretache),
-  `Adhésion idéologiques soldat` = rep(0, nombretache),
-  `Adhesion idéologique offier` = rep(0, nombretache),
-  `Adhésion idéologique civils` = rep(0, nombretache),
-  `Nombre officiers` = rep(0, nombretache),
-  `Nombre non combattants` = rep(0, nombretache),
-  `Nombre soldats` = rep(0, nombretache),
-  `Tonnes d'essences` = rep(0, nombretache),
-  `nombre de V2 prete au décolage` = rep(0, nombretache),
-  `Niveau détection depuis la terre par sovietique` = rep(0, nombretache),
-  `Niveau détection depuis la terre par usa` = rep(0, nombretache),
-  `Nombre armes super puissant pour conquerir la terre` = rep(0, nombretache),
-  `KWH produit ce mois` = rep(0, nombretache),
-  `Tonnes de petrole` = rep(0, nombretache),
-  `Tonnes de gaz` = rep(0, nombretache),
-  `Tonnes de charbon` = rep(0, nombretache),
-  `Tonnes d'uranium` = rep(0, nombretache)
-)
 
-#rajout des valeurs du début de partie
-TABLEAU_evenement%>%glimpse()
-
-TABLEAU_evenement$Equipements[1] <- 60
-TABLEAU_evenement$Eau[1] <- 31
-TABLEAU_evenement$Nourriture[1] <- 111,6
-TABLEAU_evenement$Oxygène[1] <- 74,4
-TABLEAU_evenement$`Nombre de budozzer`[1] <- 2
-TABLEAU_evenement$`Nombre de camions`[1] <- 2
-TABLEAU_evenement$`Surface habitation`[1] <- 0
-TABLEAU_evenement$`Surface biodome`[1] <- 0
-TABLEAU_evenement$`Surface atelier`[1] <- 0
-TABLEAU_evenement$`Surface base`[1] <- 0
-TABLEAU_evenement$`Nombre personne`[1] <- 200
-TABLEAU_evenement$`Adhésion idéologiques soldat`[1] <- 1
-TABLEAU_evenement$`Adhesion idéologique offier`[1] <- 1
-TABLEAU_evenement$`Adhésion idéologique civils`[1] <- 1
-TABLEAU_evenement$`Nombre officiers`[1] <- 5
-TABLEAU_evenement$`Nombre non combattants`[1] <- 100
-TABLEAU_evenement$`Nombre soldats`[1] <- 95
-TABLEAU_evenement$`Tonnes d'essences`[1] <- 18
-TABLEAU_evenement$`nombre de V2 prete au décolage`[1] <- 436
-TABLEAU_evenement$`Niveau détection depuis la terre par sovietique`[1] <- 0
-TABLEAU_evenement$`Niveau détection depuis la terre par usa`[1] <- 0
-TABLEAU_evenement$`Nombre armes super puissant pour conquerir la terre`[1] <- 0
-TABLEAU_evenement$`KWH produit ce mois`[1] <- 0
-TABLEAU_evenement$`Tonnes de petrole`[1] <- 0
-TABLEAU_evenement$`Tonnes de gaz`[1] <- 0
-TABLEAU_evenement$`Tonnes de charbon`[1] <- 0
-TABLEAU_evenement$`Tonnes d'uranium`[1] <- 0
-
+TABLEAU_EVENEMENT <- read.xlsx("C:/Users/u99amo/Downloads/GotM_TABLEAU_EVENEMENT.xlsx", sheet = "Feuil1", colNames = TRUE, detectDates = TRUE )
 #2 Creation du tableau actions avec les taches et les projets
 
 TABLEAU_ACTIONS<- read.xlsx("C:/Users/u99amo/Downloads/GotM_tableau_actions.xlsx", sheet = "Feuil1", colNames = TRUE, detectDates = TRUE )
@@ -105,35 +34,36 @@ i<-1
 
 #3 Création du formulaire de question pour le joueur----
 ##3.A on lui demande de choisir le projet en fonction des règles de conditions pour chaque missions ----
-TABLEAU_ACTIONS_projet_disponible <- TABLEAU_ACTIONS%>%
-  filter(`projet/taches` == "Projet")%>%
-  filter (début.date.validité<= TABLEAU_evenement$Date[1])%>% #verifie les dates de début
-  filter (fin.date.validité>= TABLEAU_evenement$Date[1])%>% #verifie les dates  les dates de fin
-  filter(Conditions_Equipements<= TABLEAU_evenement$Equipements[1])%>%
-  filter(Conditions_Eau <= TABLEAU_evenement$Eau[1]) %>%
-  filter(Conditions_Nourriture <= TABLEAU_evenement$Nourriture[1]) %>%
-  filter(Conditions_Oxygène <= TABLEAU_evenement$Oxygène[1]) %>%
-  filter(Conditions_Nombre.de.budozzer <= TABLEAU_evenement$`Nombre de budozzer`[1]) %>%
-  filter(Conditions_Nombre de camions <= TABLEAU_evenement$`Nombre de camions`[1]) %>%
-  filter(Conditions_Surface habitation <= TABLEAU_evenement$`Surface habitation`[1]) %>%
-  filter(Conditions_Surface biodome <= TABLEAU_evenement$`Surface biodome`[1]) %>%
-  filter(Conditions_Surface atelier <= TABLEAU_evenement$`Surface atelier`[1]) %>%
-  filter(Conditions_Surface base <= TABLEAU_evenement$`Surface base`[1]) %>%
-  filter(Conditions_Nombre soldat <= TABLEAU_evenement$`Nombre personne`[1]) %>%
-  filter(Conditions_Adhésion idéologiques soldat <= TABLEAU_evenement$`Adhésion idéologiques soldat`[1]) %>%
-  filter(Conditions_Adhesion idéologique offier <= TABLEAU_evenement$`Adhesion idéologique offier`[1]) %>%
-  filter(Conditions_Adhésion idéologique civils <= TABLEAU_evenement$`Adhésion idéologique civils`[1]) %>%
-  filter(Conditions_Nombre officiers <= TABLEAU_evenement$`Nombre officiers`[1]) %>%
-  filter(Conditions_Nombre non combattants <= TABLEAU_evenement$`Nombre non combattants`[1]) %>%
-  filter(Conditions_Nombre soldats <= TABLEAU_evenement$`Nombre soldats`[1]) %>%
-  filter(`Conditions_Tonnes d'essences` <= TABLEAU_evenement$`Tonnes d'essences`[1]) %>%
-  filter(`Conditions_nombre de V2 prete au décolage` <= TABLEAU_evenement$`nombre de V2 prete au décolage`[1]) %>%
-  filter(`Conditions_Niveau détection depuis la terre par sovietique` <= TABLEAU_evenement$`Niveau détection depuis la terre par sovietique`[1]) %>%
-  filter(`Conditions_Niveau détection depuis la terre par usa` <= TABLEAU_evenement$`Niveau détection depuis la terre par usa`[1]) %>%
-  filter(`Conditions_Nombre armes super puissant pour conquerir la terre` <= TABLEAU_evenement$`Nombre armes super puissant pour conquerir la terre`[1]) %>%
-  filter(`Conditions_KWH prduit ce mois` <= TABLEAU_evenement$`KWH produit ce mois`[1]) %>%
-  filter(`Conditions_Tonnes de petrole` <= TABLEAU_evenement$`Tonnes de petrole`[1]) %>%
-  filter(`Conditions_Tonnes de gaz` <= TABLEAU_evenement$`Tonnes de gaz`[1])
+TABLEAU_ACTIONS_projet_disponible <- TABLEAU_ACTIONS %>%   
+  filter(`projet/taches` == "Projet") %>%
+  filter(début.date.validité <= TABLEAU_EVENEMENT$Date[i]) %>%
+  filter(fin.date.validité >= TABLEAU_EVENEMENT$Date[i]) %>%
+  filter(Conditions_Tonnes_Equipements <= TABLEAU_EVENEMENT$Tonnes_Equipements[i]) %>%
+  filter(Conditions_Tonnes_Eau <= TABLEAU_EVENEMENT$Tonnes_Eau[i]) %>%
+  filter(Conditions_Tonnes_Nourriture <= TABLEAU_EVENEMENT$Tonnes_Nourriture[i]) %>%
+  filter(Conditions_Tonnes_Oxygene <= TABLEAU_EVENEMENT$Tonnes_Oxygene[i]) %>%
+  filter(Conditions_Tonnes_Essence_fusee <= TABLEAU_EVENEMENT$Tonnes_Essence_fusee[i]) %>%
+  filter(Conditions_Unites_Bulldozzer <= TABLEAU_EVENEMENT$Unites_Bulldozzer[i]) %>%
+  filter(Conditions_Unites_Camions <= TABLEAU_EVENEMENT$Unites_Camions[i]) %>%
+  filter(Conditions_Surface_Habitation <= TABLEAU_EVENEMENT$Surface_Habitation[i]) %>%
+  filter(Conditions_Surface_Biodome <= TABLEAU_EVENEMENT$Surface_Biodome[i]) %>%
+  filter(Conditions_Surface_Atelier <= TABLEAU_EVENEMENT$Surface_Atelier[i]) %>%
+  filter(Conditions_Surface_Total_base <= TABLEAU_EVENEMENT$Surface_Total_base[i]) %>%
+  filter(Conditions_Unites_Population <= TABLEAU_EVENEMENT$Unites_Population[i]) %>%
+  filter(Conditions_Pourcentage_Adhesion_ideologique_soldat <= TABLEAU_EVENEMENT$Pourcentage_Adhesion_ideologique_soldat[i]) %>%
+  filter(Conditions_Pourcentage_Adhesion_ideologique_officier <= TABLEAU_EVENEMENT$Pourcentage_Adhesion_ideologique_officier[i]) %>%
+  filter(Conditions_Pourcentage_Adhesion_ideologique_civil <= TABLEAU_EVENEMENT$Pourcentage_Adhesion_ideologique_civil[i]) %>%
+  filter(Conditions_Unites_Officier <= TABLEAU_EVENEMENT$Unites_Officier[i]) %>%
+  filter(Conditions_Unites_Civil <= TABLEAU_EVENEMENT$Unites_Civil[i]) %>%
+  filter(Conditions_Unites_Soldats <= TABLEAU_EVENEMENT$Unites_Soldats[i]) %>%
+  filter(Conditions_Unites_V2 <= TABLEAU_EVENEMENT$Unites_V2[i]) %>%
+  filter(Conditions_Pourcentage_Detection_Sovietique <= TABLEAU_EVENEMENT$Pourcentage_Detection_Sovietique[i]) %>%
+  filter(Conditions_Pourcentage_Detection_USA <= TABLEAU_EVENEMENT$Pourcentage_Detection_USA[i]) %>%
+  filter(Conditions_Unites_arme_super_puissante <= TABLEAU_EVENEMENT$Unites_arme_super_puissante[i]) %>%
+  filter(Conditions_KWperiode_electricite <= TABLEAU_EVENEMENT$KWperiode_electricite[i]) %>%
+  filter(Conditions_Tonnes_charbon <= TABLEAU_EVENEMENT$Tonnes_charbon[i]) %>%
+  filter(Conditions_Tonnes_uranium <= TABLEAU_EVENEMENT$Tonnes_uranium[i]) %>%
+  filter(Conditions_Tonnes_gaz <= TABLEAU_EVENEMENT$Tonnes_gaz[i])%>%select(titre)
 
 print(TABLEAU_ACTIONS_projet_disponible$titre)
 
