@@ -21,7 +21,45 @@ library(cowplot)
 library(scales)
 library(lubridate)
 
-#1. Importation du tableau evenement qui va regrouper toute les données jour après jour ----
+#1. Importation  des différentes tableaux
+
+#Le DF_EVENEMENT_ressources reprend toute les ressources jour par jour ainsi que les dates, c'est le tableau historique des ressources
+DF_EVENEMENT_ressources<- read.xlsx("C:/Users/u99amo/Downloads/German on the moon.xlsx", sheet = "DF_EVENEMENT_ressources", colNames = TRUE, detectDates = TRUE )
+
+#Le DF_projet_Condtions_projets reprend les conditions des projets déja réalisé pour en lancer un nouveau 
+DF_projet_Condtions_projets<- read.xlsx("C:/Users/u99amo/Downloads/German on the moon.xlsx", sheet = "DF_projet_Condtions_projets", colNames = TRUE, detectDates = TRUE )
+
+#Le DF_projet_conditions_ressources reprend les conditions nécéssaire en ressources pour autoriser un projet 
+DF_projet_conditions_ressources<- read.xlsx("C:/Users/u99amo/Downloads/German on the moon.xlsx", sheet = "DF_projet_conditions_ressources", colNames = TRUE, detectDates = TRUE )
+
+#Le DF_projet_optionsetapestxt reprend le texte pour chaque options et projets qui doit s'afficher
+DF_projet_optionsetapestxt<- read.xlsx("C:/Users/u99amo/Downloads/German on the moon.xlsx", sheet = "DF_projet_optionsetapestxt", colNames = TRUE, detectDates = TRUE )
+
+#Le DF_projet_optionsetapestrue indique pour chaque projet et chaque options et tache si elle sont réalisé ou pas
+DF_projet_optionsetapestrue<- read.xlsx("C:/Users/u99amo/Downloads/German on the moon.xlsx", sheet = "DF_projet_optionsetapestrue", colNames = TRUE, detectDates = TRUE )
+
+
+
+
+
+#2. Les formules
+#formule qui calcul la ligne du tableau qu'il faut remplir
+
+x<-DF_EVENEMENT_ressources%>%filter(is.na(Unites_Population))
+numerodelaligne<- nrow(DF_EVENEMENT_ressources) - nrow(x)+1
+
+
+#formule qui calcul l'usure naturelle
+naturelle <- function(tour){
+  DF_EVENEMENT_ressources$Tonnes_Equipements[numerodelaligne]<- DF_EVENEMENT_ressources$Tonnes_Equipements[numerodelaligne-1]*0.98 #usure de l'équipement
+  DF_EVENEMENT_ressources$Tonnes_Eau[numerodelaligne]<- DF_EVENEMENT_ressources$Tonnes_Eau[numerodelaligne-1]- ((DF_EVENEMENT_ressources$Unites_Population[numerodelaligne-1]*1.5*31)/1000)  #usure de l'eau moins 5 litres par jour et par personnes
+
+  
+  
+}
+
+
+du tableau evenement qui va regrouper toute les données jour après jour ----
 
 
 
@@ -32,6 +70,14 @@ TABLEAU_EVENEMENT<-TABLEAU_EVENEMENT%>%mutate(nbrdecivilautravail =0)
 #2 Creation du tableau actions avec les taches et les projets
 
 TABLEAU_ACTIONS<- read.xlsx("C:/Users/u99amo/Downloads/GotM_tableau_actions.xlsx", sheet = "Feuil1", colNames = TRUE, detectDates = TRUE )
+
+
+
+
+#3 Essais moteur 1 ----
+
+
+
 
 
 
@@ -119,6 +165,115 @@ TABLEAU_EVENEMENT$nbrdecivilautravail[i+1]<-TABLEAU_EVENEMENT$nbrdecivilautravai
 
 
 TABLEAU_EVENEMENT$Unites_Population[i+1]<-TABLEAU_EVENEMENT$Unites_Population[i]-choix_tache1
+
+
+
+
+
+#3 Essais moteur simulation d'un joueur 2.----
+
+
+#Le processus est le suivant
+#au premier tour, le joueur a le choix entre cliquer directement sur fin de tour ou de lancer 1,2,3 ou 4 projets parmis une liste de 15 projets disponibles 
+#pour chaque projet, il peut choisir deux options différentes
+#par exemple
+# Veux tu créer le biodome oui non
+#si oui veux tu l'option A ou B : A OR B OR annuler
+
+
+#au 2e tours et jusqu'a la fin 
+#En fonction du nombre de projet qui sont lancé (0,1,2,3,4)
+
+# Tu peux 
+#créér un projet (sauf si déja 4).
+
+# pour chaque projet créé, tu peux
+# soit le mettre en pause
+# soit choisir une autre option
+# soit ne rien faire
+
+#une fois que toute les fonctions sont finies, tu dois appuyer sur bouton fin de tour et recommencer l'opération Tu recois églament un score
+
+#Tu dois faire cela 120 fois et tu obtiens le score final
+
+
+
+
+
+
+
+
+
+
+# Liste de projets
+projets <- paste("Projet", 1:15)
+
+# Liste des options
+options <- c("A", "B")
+
+# Combinaisons possibles de projets et d'options
+combinaisons <- expand.grid(projet = projets, option = options)
+
+# Ajout de l'option de finir le tour
+combinaisons <- rbind(combinaisons, data.frame(projet = "Fin de tour", option = NA))
+
+# Afficher les combinaisons
+print(combinaisons)
+
+
+
+# Liste de tous les projets
+projets <- c("Projet1", "Projet2")
+
+# Liste de tous les états possibles
+etats <- c("Non lancé", "OptionA", "OptionB")
+
+# Fonction qui génère tous les états possibles à partir d'un état donné
+generer_etats <- function(etat_courant) {
+  # Pour chaque projet, générer tous les états possibles
+  etats_possibles <- lapply(etat_courant, function(projet) {
+    if (projet == "Non lancé") {
+      return(c("OptionA", "OptionB"))
+    } else {
+      return(c("Non lancé", "OptionA", "OptionB"))
+    }
+  })
+  
+  return(etats_possibles)
+}
+
+# Fonction pour effectuer une recherche en profondeur d'abord (DFS)
+DFS <- function(etat_initial, depth) {
+  if (depth == 0) {
+    return(list(etat_initial))
+  } else {
+    # Générer tous les états possibles à partir de l'état actuel
+    etats_possibles <- generer_etats(etat_initial)
+    
+    # Pour chaque état possible, effectuer une recherche DFS
+    resultats <- lapply(etats_possibles, function(etat) {
+      return(DFS(etat, depth - 1))
+    })
+    
+    return(resultats)
+  }
+}
+
+# Effectuer une recherche DFS à partir de l'état initial
+etat_initial <- c("Non lancé", "Non lancé")
+resultats <- DFS(etat_initial, 3)  # Effectuer une recherche DFS avec une profondeur de 3
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # # Création d'un vecteur pour stocker les réponses de l'utilisateur
