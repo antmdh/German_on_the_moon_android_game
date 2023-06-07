@@ -1,6 +1,8 @@
 #GERMAN ON THE MOON
 #1 je n'arrive pas à faire des formules mais je dois faire des bouts de code
 #2 Je dois bien me rappeler que je dois sauver toute les variables changé par les projets dans dataframe et pas dans les formules
+#3 Je dois faire une sauvegarde de chaque base de données chaque fois que je joue
+
 
 #TO DO Le systeme des projets fonctionne (mais il faut travailler la base de données, voir si je peux demanderà chat GPT)
 #Je dois faire le programme des sous taches et rajouter des calculs 
@@ -54,9 +56,9 @@ DF_mixenergetique <- data.frame(
 #le tableau data frame de l'adhesion ideologique
 #la baisse du taux idéologique est très fort au début car vivent dans les fusées, si on ne fait rien, les civils tiennes pas 3 mois, arès cela baisse
 DF_adhesionideologique<- data.frame(
-  soldat = 0.3, #valeur si postif cela baisse, si négatif cela augmente)
+  soldat = 0.15, #valeur si postif cela baisse, si négatif cela augmente)
   officier = 0.1,#valeur si postif cela baisse, si négatif cela augmente)
-  civil = 0.4)#valeur si postif cela baisse, si négatif cela augmente)
+  civil = 0.2)#valeur si postif cela baisse, si négatif cela augmente)
 
 
 ### Bouton reset du jeu (fin) ----
@@ -127,8 +129,8 @@ var_usure_Unites_Civil <- 0
 var_usure_Unites_Soldats <- 0
 var_usure_Unites_V2 <- 0
 #nevolue pas jusqu'en mai 1945 puis augmente de 2% par les usa et 3% parles russes
-var_usure_Pourcentage_Detection_Sovietique <- if_else(datefindutour< "1945-05-09",0,DF_EVENEMENT_ressources$Pourcentage_Detection_Sovietique[numerodelaligne-1]+0.03)
-var_usure_Pourcentage_Detection_USA <-if_else(datefindutour< "1945-05-08",0,DF_EVENEMENT_ressources$Pourcentage_Detection_USA[numerodelaligne-1]+0.02) 
+var_usure_Pourcentage_Detection_Sovietique <- if_else(datefindutour< "1945-05-09",0,0.03)
+var_usure_Pourcentage_Detection_USA <-if_else(datefindutour< "1945-05-08",0,0.02) 
 
 #par defaut ne change pas sauf projet
 var_usure_Unites_arme_super_puissante <- 0
@@ -176,14 +178,14 @@ DF_EVENEMENT_ressources$Unites_Population[numerodelaligne] <-
 message <- case_when(
   
   #cause fin de ressources
-  (DF_EVENEMENT_ressources$Tonnes_Eau[numerodelaligne]<0|
-    DF_EVENEMENT_ressources$Tonnes_Nourriture[numerodelaligne]<0|
-    DF_EVENEMENT_ressources$Tonnes_Oxygene[numerodelaligne]<0)~"la partie est terminée,vous avez epuisé toute vos ressources de survie",
+  DF_EVENEMENT_ressources$Tonnes_Eau[numerodelaligne]<0~"la partie est terminée, vous n'avez plus d'eau, les habitants de la base sont morts de soif",
+  DF_EVENEMENT_ressources$Tonnes_Nourriture[numerodelaligne]<0~"la partie est terminée, il n'y a plus de nourriture, les habitants de la base sont mort de faim",
+  DF_EVENEMENT_ressources$Tonnes_Oxygene[numerodelaligne]<0~"la partie est terminée, il n'y a plus d'oxygène, les habitants de la base sont morts étouffés",
   #cause cout d'état
   DF_EVENEMENT_ressources$Pourcentage_Adhesion_ideologique_officier[numerodelaligne]<=0.25~ "vous êtes renversé par un coup d'état par vos officiers",
   (DF_EVENEMENT_ressources$Tonnes_charbon [numerodelaligne]+
     DF_EVENEMENT_ressources$Tonnes_uranium[numerodelaligne]+
-    DF_EVENEMENT_ressources$Tonnes_gaz [numerodelaligne])<=0~ "vous n'avez plus d'énergie, votre base va périr",
+    DF_EVENEMENT_ressources$Tonnes_gaz [numerodelaligne])<=0~ "vous n'avez plus d'énergie, vous ne savez plus rien entreprendre, votre base va périr par le froid",
   #cause detection URSS
   DF_EVENEMENT_ressources$Pourcentage_Detection_Sovietique[numerodelaligne]>=1~ "l'URSS vient d'envoyer une bombe Tsar sur votre base, vous avez perdu",
   #cause detection URSS
@@ -195,7 +197,17 @@ print(message)
 
   
 write.xlsx(DF_EVENEMENT_ressources, "C:/Users/u99amo/Downloads/Ressources_apres_partie.xlsx")  
-  
+
+
+### Bouton afficher liste des projets en cours ainsi que l'option choisis----
+### Sous boutons choisir de changer une options  d'un des sous projets----
+
+### Bouton afficher liste des projets a creer ----
+
+### Sous boutons choisir le projet ou pas de projet 
+### Sous boutons choisir quel options pour le projet choisis
+
+
   #archives ---- 
 naturelle(1)
 du tableau evenement qui va regrouper toute les données jour après jour ----
