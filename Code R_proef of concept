@@ -1,4 +1,7 @@
 #GERMAN ON THE MOON
+#1 je n'arrive pas à faire des formules mais je dois faire des bouts de code
+#2 Je dois bien me rappeler que je dois sauver toute les variables changé par les projets dans dataframe et pas dans les formules
+
 #TO DO Le systeme des projets fonctionne (mais il faut travailler la base de données, voir si je peux demanderà chat GPT)
 #Je dois faire le programme des sous taches et rajouter des calculs 
 #stavaza 02 06 2023 : c'est une approche intéressante car elle change completement du projet de départ
@@ -21,10 +24,13 @@ library(cowplot)
 library(scales)
 library(lubridate)
 
-#1. Importation  des différentes tableaux
+### Bouton reset du jeu ----
 
 #Le DF_EVENEMENT_ressources reprend toute les ressources jour par jour ainsi que les dates, c'est le tableau historique des ressources
 DF_EVENEMENT_ressources<- read.xlsx("C:/Users/u99amo/Downloads/German on the moon.xlsx", sheet = "DF_EVENEMENT_ressources", colNames = TRUE, detectDates = TRUE )
+DF_EVENEMENT_ressources$Tonnes_Nourriture<-as.double(DF_EVENEMENT_ressources$Tonnes_Nourriture)
+DF_EVENEMENT_ressources$Tonnes_Oxygene<-as.double(DF_EVENEMENT_ressources$Tonnes_Oxygene)
+
 
 #Le DF_projet_Condtions_projets reprend les conditions des projets déja réalisé pour en lancer un nouveau 
 DF_projet_Condtions_projets<- read.xlsx("C:/Users/u99amo/Downloads/German on the moon.xlsx", sheet = "DF_projet_Condtions_projets", colNames = TRUE, detectDates = TRUE )
@@ -38,32 +44,165 @@ DF_projet_optionsetapestxt<- read.xlsx("C:/Users/u99amo/Downloads/German on the 
 #Le DF_projet_optionsetapestrue indique pour chaque projet et chaque options et tache si elle sont réalisé ou pas
 DF_projet_optionsetapestrue<- read.xlsx("C:/Users/u99amo/Downloads/German on the moon.xlsx", sheet = "DF_projet_optionsetapestrue", colNames = TRUE, detectDates = TRUE )
 
+#le tableau dataframe mixe energetique entre charbon, petrole et gaz
+DF_mixenergetique <- data.frame(
+  pourcentage_charbon = 1,
+  pourcentage_gaz = 0,
+  pourcentage_uranium = 0
+)
+
+#le tableau data frame de l'adhesion ideologique
+#la baisse du taux idéologique est très fort au début car vivent dans les fusées, si on ne fait rien, les civils tiennes pas 3 mois, arès cela baisse
+DF_adhesionideologique<- data.frame(
+  soldat = 0.3, #valeur si postif cela baisse, si négatif cela augmente)
+  officier = 0.1,#valeur si postif cela baisse, si négatif cela augmente)
+  civil = 0.4)#valeur si postif cela baisse, si négatif cela augmente)
+
+
+### Bouton reset du jeu (fin) ----
 
 
 
 
-#2. Les formules
+### Bouton tour suivant -----
 #formule qui calcul la ligne du tableau qu'il faut remplir
+
 
 x<-DF_EVENEMENT_ressources%>%filter(is.na(Unites_Population))
 numerodelaligne<- nrow(DF_EVENEMENT_ressources) - nrow(x)+1
 
+#valeur qui seront modifié par les projets et qui influence la fonction "tour" et quisont déterminé par le nombre de gens et par la ressource precedente
+populationfindutour <- DF_EVENEMENT_ressources$Unites_Population[numerodelaligne-1]
+datefindutour<-DF_EVENEMENT_ressources$Date[numerodelaligne-1]
 
-#formule qui calcul l'usure naturelle
-naturelle <- function(tour){
-  DF_EVENEMENT_ressources$Tonnes_Equipements[numerodelaligne]<- DF_EVENEMENT_ressources$Tonnes_Equipements[numerodelaligne-1]*0.98 #usure de l'équipement
-  DF_EVENEMENT_ressources$Tonnes_Eau[numerodelaligne]<- DF_EVENEMENT_ressources$Tonnes_Eau[numerodelaligne-1]- ((DF_EVENEMENT_ressources$Unites_Population[numerodelaligne-1]*1.5*31)/1000)  #usure de l'eau moins 5 litres par jour et par personnes
 
+
+
+#l'electricité est produit par du charbon etde l oxygene sauf consignes contraire
+#la consommation chnage en fonction des projets
+#50kwh par mois quand ils vivent dans les fusées
+#75kwh par mois quand ils vivent dans les bases
+#+ avec atelier + avec biodome + avec usage camion et buldozzer qui fonctionne a lelectrcite
+#+ avec armes superpuissantes
+
+var_usure_KWperiode_electricite <- 75*populationfindutour
+var_usure_Tonnes_charbon <- (var_usure_KWperiode_electricite*DF_mixenergetique$pourcentage_charbon)/7000
+var_usure_Tonnes_gaz <- (var_usure_KWperiode_electricite*DF_mixenergetique$pourcentage_gaz)/10000
+var_usure_Tonnes_uranium <- (var_usure_KWperiode_electricite*DF_mixenergetique$pourcentage_uranium)/20000000
+
+
+#par defaut baissepar tour 2% par personne et si atelier construit ensuite augmente de 0.1 % par metre carré mais cela on le met dans la formule de l'atelir
+var_usure_Tonnes_Equipements <-0.02*populationfindutour*0.3
+#par defaut baisse de 5 litres par personne par jour sauf avec biodome, cela fait plus
+var_usure_Tonnes_Eau <- 0.005*populationfindutour*31
+#par defaut baisse de 1,5 kg par personne etpar jour mais augmente en cas de biodome
+var_usure_Tonnes_Nourriture <- 0.0015*populationfindutour*31
+#par defaut baisse de 1k par personne et par jours+la consommation pour electricte
+var_usure_Tonnes_Oxygene <- (0.001*populationfindutour*31)+#population humaine
+  (var_usure_Tonnes_charbon*3)+ #il faut 3kg d'oxygene pour faire bruler 1kg charbons
+  (var_usure_Tonnes_gaz*10)+ #il faut 10 kg d'oxygene pour faire bruler 1kg de gaz
+  (var_usure_Tonnes_uranium*0)#il ne faut pas d'oxygene pour faire de l'electricité avec de l'uranium
   
   
-}
+#par defaut ne change pas sauf utilisation
+var_usure_Tonnes_Essence_fusee <- 0
+#par defaut ne change pas sauf utilisation
+var_usure_Unites_Bulldozzer <- 0
+#par defaut ne change pas sauf utilisation
+var_usure_Unites_Camions <- 0
+#par defaut ne change pas sauf projet
+var_usure_Surface_Habitation <-0
+#par defaut ne change pas sauf projet
+var_usure_Surface_Biodome <- 0
+#par defaut ne change pas sauf projet
+var_usure_Surface_Atelier <- 0
+#var_usure_Surface_Total_base ne s'applique pas, calculer par la formule tour
+#var_usure_Unites_Population <- ne s'applique pas, calculer par la formule tour
 
 
+
+#par defaut ne change pas sauf projet
+var_usure_Unites_Officier <- 0
+var_usure_Unites_Civil <- 0
+var_usure_Unites_Soldats <- 0
+var_usure_Unites_V2 <- 0
+#nevolue pas jusqu'en mai 1945 puis augmente de 2% par les usa et 3% parles russes
+var_usure_Pourcentage_Detection_Sovietique <- if_else(datefindutour< "1945-05-09",0,DF_EVENEMENT_ressources$Pourcentage_Detection_Sovietique[numerodelaligne-1]+0.03)
+var_usure_Pourcentage_Detection_USA <-if_else(datefindutour< "1945-05-08",0,DF_EVENEMENT_ressources$Pourcentage_Detection_USA[numerodelaligne-1]+0.02) 
+
+#par defaut ne change pas sauf projet
+var_usure_Unites_arme_super_puissante <- 0
+
+
+#DF_EVENEMENT_ressources$Date[numerodelaligne] <- DF_EVENEMENT_ressources$Date[numerodelaligne-1]
+DF_EVENEMENT_ressources$Tonnes_Equipements[numerodelaligne] <- round(DF_EVENEMENT_ressources$Tonnes_Equipements[numerodelaligne-1] - var_usure_Tonnes_Equipements,2)
+DF_EVENEMENT_ressources$Tonnes_Eau[numerodelaligne] <- round(DF_EVENEMENT_ressources$Tonnes_Eau[numerodelaligne-1] - var_usure_Tonnes_Eau,2)
+DF_EVENEMENT_ressources$Tonnes_Nourriture[numerodelaligne] <- round(DF_EVENEMENT_ressources$Tonnes_Nourriture[numerodelaligne-1] - var_usure_Tonnes_Nourriture,2)
+DF_EVENEMENT_ressources$Tonnes_Oxygene[numerodelaligne] <- round(DF_EVENEMENT_ressources$Tonnes_Oxygene[numerodelaligne-1] - var_usure_Tonnes_Oxygene,2)
+DF_EVENEMENT_ressources$Tonnes_Essence_fusee[numerodelaligne] <- round(DF_EVENEMENT_ressources$Tonnes_Essence_fusee[numerodelaligne-1] - var_usure_Tonnes_Essence_fusee,2)
+DF_EVENEMENT_ressources$Unites_Bulldozzer[numerodelaligne] <- DF_EVENEMENT_ressources$Unites_Bulldozzer[numerodelaligne-1] - var_usure_Unites_Bulldozzer
+DF_EVENEMENT_ressources$Unites_Camions[numerodelaligne] <- DF_EVENEMENT_ressources$Unites_Camions[numerodelaligne-1] - var_usure_Unites_Camions
+DF_EVENEMENT_ressources$Surface_Habitation[numerodelaligne] <- DF_EVENEMENT_ressources$Surface_Habitation[numerodelaligne-1] - var_usure_Surface_Habitation
+DF_EVENEMENT_ressources$Surface_Biodome[numerodelaligne] <- DF_EVENEMENT_ressources$Surface_Biodome[numerodelaligne-1] - var_usure_Surface_Biodome
+DF_EVENEMENT_ressources$Surface_Atelier[numerodelaligne] <- DF_EVENEMENT_ressources$Surface_Atelier[numerodelaligne-1] - var_usure_Surface_Atelier
+DF_EVENEMENT_ressources$Pourcentage_Adhesion_ideologique_soldat[numerodelaligne] <- round(DF_EVENEMENT_ressources$Pourcentage_Adhesion_ideologique_soldat[numerodelaligne-1] -DF_adhesionideologique$soldat,2)
+DF_EVENEMENT_ressources$Pourcentage_Adhesion_ideologique_officier[numerodelaligne] <- round(DF_EVENEMENT_ressources$Pourcentage_Adhesion_ideologique_officier[numerodelaligne-1] - DF_adhesionideologique$officier,2)
+DF_EVENEMENT_ressources$Pourcentage_Adhesion_ideologique_civil[numerodelaligne] <- round(DF_EVENEMENT_ressources$Pourcentage_Adhesion_ideologique_civil[numerodelaligne-1] - DF_adhesionideologique$civil,2)
+DF_EVENEMENT_ressources$Unites_Officier[numerodelaligne] <- DF_EVENEMENT_ressources$Unites_Officier[numerodelaligne-1] - var_usure_Unites_Officier
+DF_EVENEMENT_ressources$Unites_Civil[numerodelaligne] <- DF_EVENEMENT_ressources$Unites_Civil[numerodelaligne-1] - var_usure_Unites_Civil
+DF_EVENEMENT_ressources$Unites_Soldats[numerodelaligne] <- DF_EVENEMENT_ressources$Unites_Soldats[numerodelaligne-1] - var_usure_Unites_Soldats
+DF_EVENEMENT_ressources$Unites_V2[numerodelaligne] <- DF_EVENEMENT_ressources$Unites_V2[numerodelaligne-1] - var_usure_Unites_V2
+DF_EVENEMENT_ressources$Pourcentage_Detection_Sovietique[numerodelaligne] <- round(DF_EVENEMENT_ressources$Pourcentage_Detection_Sovietique[numerodelaligne-1] - var_usure_Pourcentage_Detection_Sovietique,0)
+DF_EVENEMENT_ressources$Pourcentage_Detection_USA[numerodelaligne] <- round(DF_EVENEMENT_ressources$Pourcentage_Detection_USA[numerodelaligne-1] - var_usure_Pourcentage_Detection_USA,0)
+DF_EVENEMENT_ressources$Unites_arme_super_puissante[numerodelaligne] <- DF_EVENEMENT_ressources$Unites_arme_super_puissante[numerodelaligne-1] - var_usure_Unites_arme_super_puissante
+DF_EVENEMENT_ressources$KWperiode_electricite[numerodelaligne] <-round(var_usure_KWperiode_electricite,0)
+DF_EVENEMENT_ressources$Tonnes_charbon[numerodelaligne] <- round(DF_EVENEMENT_ressources$Tonnes_charbon[numerodelaligne-1] - var_usure_Tonnes_charbon,2)
+DF_EVENEMENT_ressources$Tonnes_uranium[numerodelaligne] <- round(DF_EVENEMENT_ressources$Tonnes_uranium[numerodelaligne-1] - var_usure_Tonnes_uranium,2)
+DF_EVENEMENT_ressources$Tonnes_gaz[numerodelaligne] <- round(DF_EVENEMENT_ressources$Tonnes_gaz[numerodelaligne-1] - var_usure_Tonnes_gaz,2)
+
+#formule differentes des autres
+DF_EVENEMENT_ressources$Surface_Total_base[numerodelaligne] <- 
+  DF_EVENEMENT_ressources$Surface_Atelier[numerodelaligne]+
+  DF_EVENEMENT_ressources$Surface_Biodome[numerodelaligne]+
+  DF_EVENEMENT_ressources$Surface_Atelier[numerodelaligne]
+  
+DF_EVENEMENT_ressources$Unites_Population[numerodelaligne] <-
+  DF_EVENEMENT_ressources$Unites_Officier[numerodelaligne]+
+  DF_EVENEMENT_ressources$Unites_Civil[numerodelaligne]+
+  DF_EVENEMENT_ressources$Unites_Soldats[numerodelaligne]
+
+#cause fin du jeu
+
+message <- case_when(
+  
+  #cause fin de ressources
+  (DF_EVENEMENT_ressources$Tonnes_Eau[numerodelaligne]<0|
+    DF_EVENEMENT_ressources$Tonnes_Nourriture[numerodelaligne]<0|
+    DF_EVENEMENT_ressources$Tonnes_Oxygene[numerodelaligne]<0)~"la partie est terminée,vous avez epuisé toute vos ressources de survie",
+  #cause cout d'état
+  DF_EVENEMENT_ressources$Pourcentage_Adhesion_ideologique_officier[numerodelaligne]<=0.25~ "vous êtes renversé par un coup d'état par vos officiers",
+  (DF_EVENEMENT_ressources$Tonnes_charbon [numerodelaligne]+
+    DF_EVENEMENT_ressources$Tonnes_uranium[numerodelaligne]+
+    DF_EVENEMENT_ressources$Tonnes_gaz [numerodelaligne])<=0~ "vous n'avez plus d'énergie, votre base va périr",
+  #cause detection URSS
+  DF_EVENEMENT_ressources$Pourcentage_Detection_Sovietique[numerodelaligne]>=1~ "l'URSS vient d'envoyer une bombe Tsar sur votre base, vous avez perdu",
+  #cause detection URSS
+  DF_EVENEMENT_ressources$Pourcentage_Detection_USA[numerodelaligne]>=1~ "Les américains ont envoyé des spaces marines qui ont conquis votre base",
+  TRUE~"tour suivant commencé")
+print(message)
+  
+### Bouton tour suivant (fin) -----
+
+  
+write.xlsx(DF_EVENEMENT_ressources, "C:/Users/u99amo/Downloads/Ressources_apres_partie.xlsx")  
+  
+  #archives ---- 
+naturelle(1)
 du tableau evenement qui va regrouper toute les données jour après jour ----
-
-
-
-TABLEAU_EVENEMENT <- read.xlsx("C:/Users/u99amo/Downloads/GotM_TABLEAU_EVENEMENT.xlsx", sheet = "Feuil1", colNames = TRUE, detectDates = TRUE )
+  
+  
+  
+  TABLEAU_EVENEMENT <- read.xlsx("C:/Users/u99amo/Downloads/GotM_TABLEAU_EVENEMENT.xlsx", sheet = "Feuil1", colNames = TRUE, detectDates = TRUE )
 
 TABLEAU_EVENEMENT<-TABLEAU_EVENEMENT%>%mutate(nbrdecivilautravail =0)
 
