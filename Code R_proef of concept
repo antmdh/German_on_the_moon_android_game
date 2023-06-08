@@ -178,25 +178,29 @@ DF_EVENEMENT_ressources$Unites_Population[numerodelaligne] <-
 message <- case_when(
   
   #cause fin de ressources
-  DF_EVENEMENT_ressources$Tonnes_Eau[numerodelaligne]<0~"la partie est terminée, vous n'avez plus d'eau, les habitants de la base sont morts de soif",
-  DF_EVENEMENT_ressources$Tonnes_Nourriture[numerodelaligne]<0~"la partie est terminée, il n'y a plus de nourriture, les habitants de la base sont mort de faim",
-  DF_EVENEMENT_ressources$Tonnes_Oxygene[numerodelaligne]<0~"la partie est terminée, il n'y a plus d'oxygène, les habitants de la base sont morts étouffés",
+  DF_EVENEMENT_ressources$Tonnes_Eau[numerodelaligne]<0~"la partie est terminée, vous n'avez plus d'eau, les habitants de la base sont morts de soif. C'est bien fait pour vous bandes de sales nazis!",
+  DF_EVENEMENT_ressources$Tonnes_Nourriture[numerodelaligne]<0~"la partie est terminée, il n'y a plus de nourriture, les habitants de la base sont mort de faim. C'est bien fait pour vous bandes de sales nazis!",
+  DF_EVENEMENT_ressources$Tonnes_Oxygene[numerodelaligne]<0~"la partie est terminée, il n'y a plus d'oxygène, les habitants de la base sont morts étouffés. C'est bien fait pour vous bandes de sales nazis!",
   #cause cout d'état
-  DF_EVENEMENT_ressources$Pourcentage_Adhesion_ideologique_officier[numerodelaligne]<=0.25~ "vous êtes renversé par un coup d'état par vos officiers",
+  DF_EVENEMENT_ressources$Pourcentage_Adhesion_ideologique_officier[numerodelaligne]<=0.25~ "vous êtes renversé par un coup d'état par vos officiers. Un autre nazi va prendre ta place. J'espère que vous allez échouer bande de sales nazis",
   (DF_EVENEMENT_ressources$Tonnes_charbon [numerodelaligne]+
     DF_EVENEMENT_ressources$Tonnes_uranium[numerodelaligne]+
-    DF_EVENEMENT_ressources$Tonnes_gaz [numerodelaligne])<=0~ "vous n'avez plus d'énergie, vous ne savez plus rien entreprendre, votre base va périr par le froid",
+    DF_EVENEMENT_ressources$Tonnes_gaz [numerodelaligne])<=0~ "vous n'avez plus d'énergie, vous ne savez plus rien entreprendre, votre base va périr par le froid. C'est bien fait pour vous bandes de sales nazis!",
   #cause detection URSS
-  DF_EVENEMENT_ressources$Pourcentage_Detection_Sovietique[numerodelaligne]>=1~ "l'URSS vient d'envoyer une bombe Tsar sur votre base, vous avez perdu",
+  DF_EVENEMENT_ressources$Pourcentage_Detection_Sovietique[numerodelaligne]>=1~ "l'URSS vient d'envoyer une bombe Tsar sur votre base, vous avez perdu. Une bonne manière d'éradiquer les nazis!",
   #cause detection URSS
-  DF_EVENEMENT_ressources$Pourcentage_Detection_USA[numerodelaligne]>=1~ "Les américains ont envoyé des spaces marines qui ont conquis votre base",
+  DF_EVENEMENT_ressources$Pourcentage_Detection_USA[numerodelaligne]>=1~ "Les américains ont envoyé des spaces marines qui ont conquis votre base. Les officiers US vont peut être sauvez les officiers les plus talentueux, un peu comme von brauwn, pour le reste vous aller y passer sale nazi !",
   TRUE~"tour suivant commencé")
 print(message)
-  
+ 
+
+#sauvegarde
+write.xlsx(DF_EVENEMENT_ressources, "C:/Users/u99amo/Downloads/German on the moon_sauvegarde.xlsx",sheet = "DF_EVENEMENT_ressources")  
+
 ### Bouton tour suivant (fin) -----
 
   
-write.xlsx(DF_EVENEMENT_ressources, "C:/Users/u99amo/Downloads/Ressources_apres_partie.xlsx")  
+
 
 
 ### Bouton afficher liste des projets en cours ainsi que l'option choisis----
