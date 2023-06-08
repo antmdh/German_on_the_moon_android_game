@@ -11,6 +11,7 @@
 #Les taches sont continues et donc on ne doit pas introduire de oui non pour une tache, on peut rajouter un chiffre du nombre de gens impliqué
 #mais c'est pas très chouette, demande des controle en plus et finalement c'est difficile de choisir.
 
+#Lancement du jeux----
 
 # Charger la bibliothèque tidyverse
 library(tidyverse)
@@ -25,6 +26,15 @@ library(stringr)
 library(cowplot)
 library(scales)
 library(lubridate)
+#install.packages("openxlsx")
+library(openxlsx)
+library(dplyr)
+#install.packages("purrr")
+library(purrr)
+
+#Lancement du jeux fin----
+
+
 
 ### Bouton reset du jeu ----
 
@@ -59,6 +69,36 @@ DF_adhesionideologique<- data.frame(
   soldat = 0.15, #valeur si postif cela baisse, si négatif cela augmente)
   officier = 0.1,#valeur si postif cela baisse, si négatif cela augmente)
   civil = 0.2)#valeur si postif cela baisse, si négatif cela augmente)
+
+#Création d'un fichier de sauvegarde
+write.xlsx(DF_EVENEMENT_ressources, "C:/Users/u99amo/Downloads/German on the moon_sauvegarde.xlsx") 
+
+#enregistrement des données dans ce fichier
+# Charger le classeur
+wb <- loadWorkbook("C:/Users/u99amo/Downloads/German on the moon_sauvegarde.xlsx")
+removeWorksheet(wb, "Sheet 1")
+# Ajouter une nouvelle feuille et écrire dans cette feuille. Si elle existe déja, elle sera remplacée
+addWorksheet(wb, "DF_EVENEMENT_ressources")
+writeData(wb, "DF_EVENEMENT_ressources", DF_EVENEMENT_ressources)
+
+addWorksheet(wb, "DF_projet_Condtions_projets")
+writeData(wb, "DF_projet_Condtions_projets", DF_projet_Condtions_projets)
+
+addWorksheet(wb, "DF_projet_optionsetapestxt")
+writeData(wb, "DF_projet_optionsetapestxt", DF_projet_optionsetapestxt)
+
+addWorksheet(wb, "DF_projet_optionsetapestrue")
+writeData(wb, "DF_projet_optionsetapestrue", DF_projet_optionsetapestrue)
+
+addWorksheet(wb, "DF_mixenergetique")
+writeData(wb, "DF_mixenergetique", DF_mixenergetique)
+
+addWorksheet(wb, "DF_adhesionideologique")
+writeData(wb, "DF_adhesionideologique", DF_adhesionideologique)
+
+# Sauvegarder le classeur
+saveWorkbook(wb, "C:/Users/u99amo/Downloads/German on the moon_sauvegarde.xlsx", overwrite = TRUE)
+
 
 
 ### Bouton reset du jeu (fin) ----
@@ -104,8 +144,8 @@ var_usure_Tonnes_Oxygene <- (0.001*populationfindutour*31)+#population humaine
   (var_usure_Tonnes_charbon*3)+ #il faut 3kg d'oxygene pour faire bruler 1kg charbons
   (var_usure_Tonnes_gaz*10)+ #il faut 10 kg d'oxygene pour faire bruler 1kg de gaz
   (var_usure_Tonnes_uranium*0)#il ne faut pas d'oxygene pour faire de l'electricité avec de l'uranium
-  
-  
+
+
 #par defaut ne change pas sauf utilisation
 var_usure_Tonnes_Essence_fusee <- 0
 #par defaut ne change pas sauf utilisation
@@ -167,7 +207,7 @@ DF_EVENEMENT_ressources$Surface_Total_base[numerodelaligne] <-
   DF_EVENEMENT_ressources$Surface_Atelier[numerodelaligne]+
   DF_EVENEMENT_ressources$Surface_Biodome[numerodelaligne]+
   DF_EVENEMENT_ressources$Surface_Atelier[numerodelaligne]
-  
+
 DF_EVENEMENT_ressources$Unites_Population[numerodelaligne] <-
   DF_EVENEMENT_ressources$Unites_Officier[numerodelaligne]+
   DF_EVENEMENT_ressources$Unites_Civil[numerodelaligne]+
@@ -184,35 +224,161 @@ message <- case_when(
   #cause cout d'état
   DF_EVENEMENT_ressources$Pourcentage_Adhesion_ideologique_officier[numerodelaligne]<=0.25~ "vous êtes renversé par un coup d'état par vos officiers. Un autre nazi va prendre ta place. J'espère que vous allez échouer bande de sales nazis",
   (DF_EVENEMENT_ressources$Tonnes_charbon [numerodelaligne]+
-    DF_EVENEMENT_ressources$Tonnes_uranium[numerodelaligne]+
-    DF_EVENEMENT_ressources$Tonnes_gaz [numerodelaligne])<=0~ "vous n'avez plus d'énergie, vous ne savez plus rien entreprendre, votre base va périr par le froid. C'est bien fait pour vous bandes de sales nazis!",
+     DF_EVENEMENT_ressources$Tonnes_uranium[numerodelaligne]+
+     DF_EVENEMENT_ressources$Tonnes_gaz [numerodelaligne])<=0~ "vous n'avez plus d'énergie, vous ne savez plus rien entreprendre, votre base va périr par le froid. C'est bien fait pour vous bandes de sales nazis!",
   #cause detection URSS
   DF_EVENEMENT_ressources$Pourcentage_Detection_Sovietique[numerodelaligne]>=1~ "l'URSS vient d'envoyer une bombe Tsar sur votre base, vous avez perdu. Une bonne manière d'éradiquer les nazis!",
   #cause detection URSS
   DF_EVENEMENT_ressources$Pourcentage_Detection_USA[numerodelaligne]>=1~ "Les américains ont envoyé des spaces marines qui ont conquis votre base. Les officiers US vont peut être sauvez les officiers les plus talentueux, un peu comme von brauwn, pour le reste vous aller y passer sale nazi !",
   TRUE~"tour suivant commencé")
+# print(message)
+
+
+
+
+
+
+# Charger le classeur
+wb <- loadWorkbook("C:/Users/u99amo/Downloads/German on the moon_sauvegarde.xlsx")
+# Ajouter le dataframe 'df' en tant que nouvelle feuille nommée 'new_sheet'
+# Si une feuille nommée 'new_sheet' existe déjà, elle sera remplacée
+writeData(wb, "DF_EVENEMENT_ressources", DF_EVENEMENT_ressources)
+# Sauvegarder le classeur
+saveWorkbook(wb, "C:/Users/u99amo/Downloads/German on the moon_sauvegarde.xlsx", overwrite = TRUE)
+
 print(message)
- 
-
-#sauvegarde
-write.xlsx(DF_EVENEMENT_ressources, "C:/Users/u99amo/Downloads/German on the moon_sauvegarde.xlsx",sheet = "DF_EVENEMENT_ressources")  
-
 ### Bouton tour suivant (fin) -----
 
+
+
+
+
+
+### Bouton afficher les nouveaux projets ----
+#le programme va verifier
+#a) si la liste des projets a proposé répond aux condiions de ressources
+#b) si la liste des projets a proposé n'a pas déja été réalisé
+#c) si laliste des projets à proposé répond aux conditions d'existence d'un autre projet déja réalisé
+
+Listequirespecte_conditions_ressources<- DF_projet_conditions_ressources %>%
+  filter(Tonnes_Equipements <= DF_EVENEMENT_ressources$Tonnes_Equipements[numerodelaligne] ) %>%
+  filter(Tonnes_Eau <= DF_EVENEMENT_ressources$Tonnes_Eau[numerodelaligne] ) %>%
+  filter(Tonnes_Nourriture <= DF_EVENEMENT_ressources$Tonnes_Nourriture[numerodelaligne] ) %>%
+  filter(Tonnes_Oxygene <= DF_EVENEMENT_ressources$Tonnes_Oxygene[numerodelaligne] ) %>%
+  filter(Tonnes_Essence_fusee <= DF_EVENEMENT_ressources$Tonnes_Essence_fusee[numerodelaligne] ) %>%
+  filter(Unites_Bulldozzer <= DF_EVENEMENT_ressources$Unites_Bulldozzer[numerodelaligne] ) %>%
+  filter(Unites_Camions <= DF_EVENEMENT_ressources$Unites_Camions[numerodelaligne] ) %>%
+  filter(Surface_Habitation <= DF_EVENEMENT_ressources$Surface_Habitation[numerodelaligne] ) %>%
+  filter(Surface_Biodome <= DF_EVENEMENT_ressources$Surface_Biodome[numerodelaligne] ) %>%
+  filter(Surface_Atelier <= DF_EVENEMENT_ressources$Surface_Atelier[numerodelaligne] ) %>%
+  filter(Surface_Total_base <= DF_EVENEMENT_ressources$Surface_Total_base[numerodelaligne] ) %>%
+  filter(Unites_Population <= DF_EVENEMENT_ressources$Unites_Population[numerodelaligne] ) %>%
+  filter(Pourcentage_Adhesion_ideologique_soldat <= DF_EVENEMENT_ressources$Pourcentage_Adhesion_ideologique_soldat[numerodelaligne] ) %>%
+  filter(Pourcentage_Adhesion_ideologique_officier <= DF_EVENEMENT_ressources$Pourcentage_Adhesion_ideologique_officier[numerodelaligne] ) %>%
+  filter(Pourcentage_Adhesion_ideologique_civil <= DF_EVENEMENT_ressources$Pourcentage_Adhesion_ideologique_civil[numerodelaligne] ) %>%
+  filter(Unites_Officier <= DF_EVENEMENT_ressources$Unites_Officier[numerodelaligne] ) %>%
+  filter(Unites_Civil <= DF_EVENEMENT_ressources$Unites_Civil[numerodelaligne] ) %>%
+  filter(Unites_Soldats <= DF_EVENEMENT_ressources$Unites_Soldats[numerodelaligne] ) %>%
+  filter(Unites_V2 <= DF_EVENEMENT_ressources$Unites_V2[numerodelaligne] ) %>%
+  filter(Pourcentage_Detection_Sovietique <= DF_EVENEMENT_ressources$Pourcentage_Detection_Sovietique[numerodelaligne] ) %>%
+  filter(Pourcentage_Detection_USA <= DF_EVENEMENT_ressources$Pourcentage_Detection_USA[numerodelaligne] ) %>%
+  filter(Unites_arme_super_puissante <= DF_EVENEMENT_ressources$Unites_arme_super_puissante[numerodelaligne] ) %>%
+  filter(KWperiode_electricite <= DF_EVENEMENT_ressources$KWperiode_electricite[numerodelaligne] ) %>%
+  filter(Tonnes_charbon <= DF_EVENEMENT_ressources$Tonnes_charbon[numerodelaligne] ) %>%
+  filter(Tonnes_uranium <= DF_EVENEMENT_ressources$Tonnes_uranium[numerodelaligne] ) %>%
+  filter(Tonnes_gaz <= DF_EVENEMENT_ressources$Tonnes_gaz[numerodelaligne])%>%
+  select(projet)
+
+Listedesprojestpasencorelance<-DF_projet_optionsetapestrue%>%
+  filter(projetlance!=1)%>%select(projet)
+
+Listeprojetatester<-Listedesprojestpasencorelance%>%
+  mutate(ressourceOK = projet%in%Listequirespecte_conditions_ressources$projet)%>%
+  filter(ressourceOK == TRUE)%>%
+  select(projet)
+rm(Listequirespecte_conditions_ressources )
+
+verifiesiprojetOKavecconditionprojet<-function(projetx){
+  #projetx<-Listeprojetatester$projet[8]
   
+  x1<- DF_projet_Condtions_projets%>%filter(projet == projetx)%>%pull(Condtions1)
+  x2<- DF_projet_Condtions_projets%>%filter(projet == projetx)%>%pull(Condtions2)
+  x3<- DF_projet_Condtions_projets%>%filter(projet == projetx)%>%pull(Condtions3)
+  x4<- DF_projet_Condtions_projets%>%filter(projet == projetx)%>%pull(Condtions4)
+  x5<- DF_projet_Condtions_projets%>%filter(projet == projetx)%>%pull(Condtions5)
+  
+  reponseconditions1<- if_else(is.na(x1),1,
+                    if_else(!x1%in%Listedesprojestpasencorelance$projet,1,0))
+  reponseconditions2<- if_else(is.na(x2),1,
+                               if_else(!x2%in%Listedesprojestpasencorelance$projet,1,0))
+  reponseconditions3<- if_else(is.na(x3),1,
+                               if_else(!x3%in%Listedesprojestpasencorelance$projet,1,0))
+  reponseconditions4<- if_else(is.na(x4),1,
+                               if_else(!x5%in%Listedesprojestpasencorelance$projet,1,0))
+  reponseconditions5<- if_else(is.na(x5),1,
+                               if_else(!x5%in%Listedesprojestpasencorelance$projet,1,0))
+  
+  reponse <- reponseconditions1+
+    reponseconditions2+
+    reponseconditions3+
+    reponseconditions4+
+    reponseconditions5
+  
+  resultat<-if_else(reponse==5, "projetOK","projetpasok")
+  return(resultat)
+}
+
+Listeprojetatester<- Listeprojetatester%>%mutate(condition = lapply(Listeprojetatester$projet,verifiesiprojetOKavecconditionprojet))
+
+Listeprojetatester<- Listeprojetatester%>%filter(condition == "projetOK")%>%select(projet)
+
+
+
+rm(Listedesprojestpasencorelance)
+rm(verifiesiprojetOKavecconditionprojet)
+
+print("voici la liste des projets à créér")
+print(Listeprojetatester)
+
+### Bouton afficher les nouveaux projets  (fin) ----
+
+
+### Bouton créé un projet----
+choix_titre <- readline(prompt="Veuillez choisir le numéro du projet proposé")
+### Bouton créé un projet(fin) ----
+
+
+
+
 
 
 
 ### Bouton afficher liste des projets en cours ainsi que l'option choisis----
 ### Sous boutons choisir de changer une options  d'un des sous projets----
 
-### Bouton afficher liste des projets a creer ----
+
+
+
+DF_projet_Condtions_projets%>%filter(Conditions1)
+
+Listedesprojestpasdanslesconditionspourprojet
+Listedesprojestpasencorelance[5]
+
+DF_projet_Condtions_projets$Exploitation.de.ressources.minérales.locales
+  
+  
+  
+  DF_projet_Condtions_projets%>%
+  filter(`Construction.de.l'atelier.de.la.base` )
+
+glimpse(DF_projet_Condtions_projets)
+
 
 ### Sous boutons choisir le projet ou pas de projet 
 ### Sous boutons choisir quel options pour le projet choisis
 
 
-  #archives ---- 
+#archives ---- 
 naturelle(1)
 du tableau evenement qui va regrouper toute les données jour après jour ----
   
