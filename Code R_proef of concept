@@ -313,7 +313,7 @@ if(DF_projet_en_cours$projet[4]!= ""){
 
 #d'abord on vire la formule qui est égale à 5
 
-for i in (1:4){
+for (i in 1:4){
   if(DF_projet_en_cours$etat_avancement.sur.5[i]==5){
       ligne4 <- which(DF_projet_ress_var_realise$projet == DF_projet_en_cours$projet[i])
       
@@ -353,7 +353,7 @@ for i in (1:4){
   }
 }
 
-for i in (1:4){print(i)}
+
 
 
 
