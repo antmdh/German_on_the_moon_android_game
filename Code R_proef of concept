@@ -1,10 +1,13 @@
 #GERMAN ON THE MOON
+#version jeu 0.1 fonctionnelle
+
+#a rajouter
 #je dois faire un message d'erreur si le tableau projet encours n'a plusde place
 # je dois faire un message d'erreur si les pourcentage dépasse 100% ou vont en dessous de 0%
 # Je dois faire un programme pour changer de programme en cours
-# Je dois introduire une valeur alétoire pour faire planter le changement d'options qui soit permanent (et pas juste unefois )
+# Je dois introduire une valeur alétoire pour faire planter le projet et inviter à changer d'options
 # rajouter une fonction pour obliger à passer le tour après avoir choisis une option
-#corriger le bug dans le FOR que j'ai créé
+
 
 
 #Lancement du jeux----
@@ -176,7 +179,7 @@ if(DF_projet_en_cours$projet[2]!= ""){
   DF_projet_en_cours$etat_avancement.sur.5[2]<-DF_projet_en_cours$etat_avancement.sur.5[2]+1
   if (DF_projet_en_cours$options[2] == 1){
     numerocolonne<-3+DF_projet_en_cours$etat_avancement.sur.5[2]
-    petittableau<- DF_projet_optionsetapestxt%>%filter(Projet == DF_projet_en_cours$projet[1])
+    petittableau<- DF_projet_optionsetapestxt%>%filter(Projet == DF_projet_en_cours$projet[2])
     DF_projet_en_cours$Etapes.en.en.cours[2]<- petittableau[1,numerocolonne]
   }
   if (DF_projet_en_cours$options[2] == 2){ 
@@ -222,7 +225,7 @@ if(DF_projet_en_cours$projet[3]!= ""){
   DF_projet_en_cours$etat_avancement.sur.5[3]<-DF_projet_en_cours$etat_avancement.sur.5[3]+1
   if (DF_projet_en_cours$options[3] == 1){
     numerocolonne<-3+DF_projet_en_cours$etat_avancement.sur.5[3]
-    petittableau<- DF_projet_optionsetapestxt%>%filter(Projet == DF_projet_en_cours$projet[1])
+    petittableau<- DF_projet_optionsetapestxt%>%filter(Projet == DF_projet_en_cours$projet[3])
     DF_projet_en_cours$Etapes.en.en.cours[3]<- petittableau[1,numerocolonne]
   }
   if (DF_projet_en_cours$options[3] == 2){ 
@@ -268,7 +271,7 @@ if(DF_projet_en_cours$projet[4]!= ""){
   DF_projet_en_cours$etat_avancement.sur.5[4]<-DF_projet_en_cours$etat_avancement.sur.5[4]+1
   if (DF_projet_en_cours$options[4] == 1){
     numerocolonne<-3+DF_projet_en_cours$etat_avancement.sur.5[4]
-    petittableau<- DF_projet_optionsetapestxt%>%filter(Projet == DF_projet_en_cours$projet[1])
+    petittableau<- DF_projet_optionsetapestxt%>%filter(Projet == DF_projet_en_cours$projet[4])
     DF_projet_en_cours$Etapes.en.en.cours[4]<- petittableau[1,numerocolonne]
   }
   if (DF_projet_en_cours$options[4] == 2){ 
@@ -311,7 +314,7 @@ if(DF_projet_en_cours$projet[4]!= ""){
 
 #formule qui va changer la variable de variation une fois le projet terminé
 
-#d'abord on vire la formule qui est égale à 5
+#d'abord on vire la formule qui est égale à etape 5 du DF projet en cours
 
 for (i in 1:4){
   if(DF_projet_en_cours$etat_avancement.sur.5[i]==5){
@@ -358,6 +361,7 @@ for (i in 1:4){
 
 
 
+
 #formule qui impact les ressources
 
 
@@ -378,7 +382,7 @@ datefindutour<-DF_EVENEMENT_ressources$Date[numerodelaligne-1]
 #+ avec atelier + avec biodome + avec usage camion et buldozzer qui fonctionne a lelectrcite
 #+ avec armes superpuissantes
 #On calcul la valeur du KWH qui dépend de la population et du nombre d'instalation réalisé
-var_usure_KWperiode_electricite <- populationfindutour*prod(DF_projet_ress_var_realise$KWperiode_electricite, na.rm = TRUE)
+var_usure_KWperiode_electricite <- populationfindutour*sum(DF_projet_ress_var_realise$KWperiode_electricite, na.rm = TRUE)
 var_usure_Tonnes_charbon <- (var_usure_KWperiode_electricite*DF_mixenergetique$pourcentage_charbon)/7000
 var_usure_Tonnes_gaz <- (var_usure_KWperiode_electricite*DF_mixenergetique$pourcentage_gaz)/10000
 var_usure_Tonnes_uranium <- (var_usure_KWperiode_electricite*DF_mixenergetique$pourcentage_uranium)/20000000
@@ -685,292 +689,3 @@ print(cinqetapesduprojet)
 ### boutons : Lancement du projet avec options (fin) ----
 
 
-
-
-
-#archives ---- 
-
-### Bouton afficher liste des projets en cours ainsi que l'option choisis----
-### Sous boutons choisir de changer une options  d'un des sous projets----
-
-
-
-
-DF_projet_Condtions_projets%>%filter(Conditions1)
-
-Listedesprojestpasdanslesconditionspourprojet
-Listedesprojestpasencorelance[5]
-
-DF_projet_Condtions_projets$Exploitation.de.ressources.minérales.locales
-
-
-
-DF_projet_Condtions_projets%>%
-  filter(`Construction.de.l'atelier.de.la.base` )
-
-glimpse(DF_projet_Condtions_projets)
-
-
-### Sous boutons choisir le projet ou pas de projet 
-### Sous boutons choisir quel options pour le projet choisis
-
-
-naturelle(1)
-du tableau evenement qui va regrouper toute les données jour après jour ----
-  
-  
-  
-  TABLEAU_EVENEMENT <- read.xlsx("C:/Users/u99amo/Downloads/GotM_TABLEAU_EVENEMENT.xlsx", sheet = "Feuil1", colNames = TRUE, detectDates = TRUE )
-
-TABLEAU_EVENEMENT<-TABLEAU_EVENEMENT%>%mutate(nbrdecivilautravail =0)
-
-#2 Creation du tableau actions avec les taches et les projets
-
-TABLEAU_ACTIONS<- read.xlsx("C:/Users/u99amo/Downloads/GotM_tableau_actions.xlsx", sheet = "Feuil1", colNames = TRUE, detectDates = TRUE )
-
-
-
-
-#3 Essais moteur 1 ----
-
-
-
-
-
-
-
-
-#choixdelaligne dans tableau evenement à remplacer par une formule 
-i<-1
-
-#3 Création du formulaire de question pour le joueur----
-##3.A on lui demande de choisir le projet en fonction des règles de conditions pour chaque missions ----
-TABLEAU_ACTIONS_projet_disponible <- TABLEAU_ACTIONS %>%   
-  filter(`projet/taches` == "Projet") %>%
-  filter(début.date.validité <= TABLEAU_EVENEMENT$Date[i]) %>%
-  filter(fin.date.validité >= TABLEAU_EVENEMENT$Date[i]) %>%
-  filter(Conditions_Tonnes_Equipements <= TABLEAU_EVENEMENT$Tonnes_Equipements[i]) %>%
-  filter(Conditions_Tonnes_Eau <= TABLEAU_EVENEMENT$Tonnes_Eau[i]) %>%
-  filter(Conditions_Tonnes_Nourriture <= TABLEAU_EVENEMENT$Tonnes_Nourriture[i]) %>%
-  filter(Conditions_Tonnes_Oxygene <= TABLEAU_EVENEMENT$Tonnes_Oxygene[i]) %>%
-  filter(Conditions_Tonnes_Essence_fusee <= TABLEAU_EVENEMENT$Tonnes_Essence_fusee[i]) %>%
-  filter(Conditions_Unites_Bulldozzer <= TABLEAU_EVENEMENT$Unites_Bulldozzer[i]) %>%
-  filter(Conditions_Unites_Camions <= TABLEAU_EVENEMENT$Unites_Camions[i]) %>%
-  filter(Conditions_Surface_Habitation <= TABLEAU_EVENEMENT$Surface_Habitation[i]) %>%
-  filter(Conditions_Surface_Biodome <= TABLEAU_EVENEMENT$Surface_Biodome[i]) %>%
-  filter(Conditions_Surface_Atelier <= TABLEAU_EVENEMENT$Surface_Atelier[i]) %>%
-  filter(Conditions_Surface_Total_base <= TABLEAU_EVENEMENT$Surface_Total_base[i]) %>%
-  filter(Conditions_Unites_Population <= TABLEAU_EVENEMENT$Unites_Population[i]) %>%
-  filter(Conditions_Pourcentage_Adhesion_ideologique_soldat <= TABLEAU_EVENEMENT$Pourcentage_Adhesion_ideologique_soldat[i]) %>%
-  filter(Conditions_Pourcentage_Adhesion_ideologique_officier <= TABLEAU_EVENEMENT$Pourcentage_Adhesion_ideologique_officier[i]) %>%
-  filter(Conditions_Pourcentage_Adhesion_ideologique_civil <= TABLEAU_EVENEMENT$Pourcentage_Adhesion_ideologique_civil[i]) %>%
-  filter(Conditions_Unites_Officier <= TABLEAU_EVENEMENT$Unites_Officier[i]) %>%
-  filter(Conditions_Unites_Civil <= TABLEAU_EVENEMENT$Unites_Civil[i]) %>%
-  filter(Conditions_Unites_Soldats <= TABLEAU_EVENEMENT$Unites_Soldats[i]) %>%
-  filter(Conditions_Unites_V2 <= TABLEAU_EVENEMENT$Unites_V2[i]) %>%
-  filter(Conditions_Pourcentage_Detection_Sovietique <= TABLEAU_EVENEMENT$Pourcentage_Detection_Sovietique[i]) %>%
-  filter(Conditions_Pourcentage_Detection_USA <= TABLEAU_EVENEMENT$Pourcentage_Detection_USA[i]) %>%
-  filter(Conditions_Unites_arme_super_puissante <= TABLEAU_EVENEMENT$Unites_arme_super_puissante[i]) %>%
-  filter(Conditions_KWperiode_electricite <= TABLEAU_EVENEMENT$KWperiode_electricite[i]) %>%
-  filter(Conditions_Tonnes_charbon <= TABLEAU_EVENEMENT$Tonnes_charbon[i]) %>%
-  filter(Conditions_Tonnes_uranium <= TABLEAU_EVENEMENT$Tonnes_uranium[i]) %>%
-  filter(Conditions_Tonnes_gaz <= TABLEAU_EVENEMENT$Tonnes_gaz[i])%>%select(titre)
-
-print(TABLEAU_ACTIONS_projet_disponible$titre)
-
-# Demander à l'utilisateur de choisir un titre
-choix_titre <- readline(prompt="Veuillez choisir un titre sans les guillements : ")
-
-### PAUSE ECRIRE LA REPONSE
-
-# Vérifier si le titre choisi existe dans le dataframe
-if (choix_titre %in% TABLEAU_ACTIONS$titre) {
-  # Rajouter le projet suivi ainsi que la date
-  info_joueur <- i
-  
-  
-  # Mettre à jour la colonne "joueur" pour la ligne choisie
-  TABLEAU_ACTIONS[TABLEAU_ACTIONS$titre == choix_titre, "joueur"] <- info_joueur
-  
-  print("L'information du joueur a été mise à jour avec succès.")
-} else {
-  print("Le titre choisi n'existe pas dans le dataframe.")
-}
-
-#3.B On lui présente les sous taches du projet choisis et il doit mettre des valeurs pour chacune 
-
-categoriesoustache<- TABLEAU_ACTIONS %>%   
-  filter(`projet/taches` == "Projet") %>%
-  filter(joueur == i)%>%pull(catégorie)
-
-questionsoustache<- TABLEAU_ACTIONS %>%   
-  filter(`projet/taches` == "tache") %>%
-  filter(catégorie == categoriesoustache)%>%select(titre)
-
-
-print(questionsoustache)
-
-# Demander à l'utilisateur de choisir un titre
-choix_tache1 <- readline(prompt="veuilliez indiquez le nombre d'homme pour cette mission : ")
-
-### PAUSE ECRIRE LA REPONSE
-
-choix_tache1<-as.integer(choix_tache1)
-
-TABLEAU_EVENEMENT$nbrdecivilautravail[i+1]<-TABLEAU_EVENEMENT$nbrdecivilautravail[i+1]+choix_tache1
-
-
-
-TABLEAU_EVENEMENT$Unites_Population[i+1]<-TABLEAU_EVENEMENT$Unites_Population[i]-choix_tache1
-
-
-
-
-
-#3 Essais moteur simulation d'un joueur 2.----
-
-
-#Le processus est le suivant
-#au premier tour, le joueur a le choix entre cliquer directement sur fin de tour ou de lancer 1,2,3 ou 4 projets parmis une liste de 15 projets disponibles 
-#pour chaque projet, il peut choisir deux options différentes
-#par exemple
-# Veux tu créer le biodome oui non
-#si oui veux tu l'option A ou B : A OR B OR annuler
-
-
-#au 2e tours et jusqu'a la fin 
-#En fonction du nombre de projet qui sont lancé (0,1,2,3,4)
-
-# Tu peux 
-#créér un projet (sauf si déja 4).
-
-# pour chaque projet créé, tu peux
-# soit le mettre en pause
-# soit choisir une autre option
-# soit ne rien faire
-
-#une fois que toute les fonctions sont finies, tu dois appuyer sur bouton fin de tour et recommencer l'opération Tu recois églament un score
-
-#Tu dois faire cela 120 fois et tu obtiens le score final
-
-
-
-
-
-
-
-
-
-
-# Liste de projets
-projets <- paste("Projet", 1:15)
-
-# Liste des options
-options <- c("A", "B")
-
-# Combinaisons possibles de projets et d'options
-combinaisons <- expand.grid(projet = projets, option = options)
-
-# Ajout de l'option de finir le tour
-combinaisons <- rbind(combinaisons, data.frame(projet = "Fin de tour", option = NA))
-
-# Afficher les combinaisons
-print(combinaisons)
-
-
-
-# Liste de tous les projets
-projets <- c("Projet1", "Projet2")
-
-# Liste de tous les états possibles
-etats <- c("Non lancé", "OptionA", "OptionB")
-
-# Fonction qui génère tous les états possibles à partir d'un état donné
-generer_etats <- function(etat_courant) {
-  # Pour chaque projet, générer tous les états possibles
-  etats_possibles <- lapply(etat_courant, function(projet) {
-    if (projet == "Non lancé") {
-      return(c("OptionA", "OptionB"))
-    } else {
-      return(c("Non lancé", "OptionA", "OptionB"))
-    }
-  })
-  
-  return(etats_possibles)
-}
-
-# Fonction pour effectuer une recherche en profondeur d'abord (DFS)
-DFS <- function(etat_initial, depth) {
-  if (depth == 0) {
-    return(list(etat_initial))
-  } else {
-    # Générer tous les états possibles à partir de l'état actuel
-    etats_possibles <- generer_etats(etat_initial)
-    
-    # Pour chaque état possible, effectuer une recherche DFS
-    resultats <- lapply(etats_possibles, function(etat) {
-      return(DFS(etat, depth - 1))
-    })
-    
-    return(resultats)
-  }
-}
-
-# Effectuer une recherche DFS à partir de l'état initial
-etat_initial <- c("Non lancé", "Non lancé")
-resultats <- DFS(etat_initial, 3)  # Effectuer une recherche DFS avec une profondeur de 3
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# # Création d'un vecteur pour stocker les réponses de l'utilisateur
-# joueur <- character(length(titre))
-# # Boucle pour demander à l'utilisateur de saisir une réponse pour chaque ligne du tableau
-# for (i in 1:nrow(TABLEAU_ACTIONS_projet)) {
-#   message(paste("Que voulez-vous faire avec la tâche '", TABLEAU_ACTIONS_projet$titre[i], "' ? (faire = 1 /ne jamais faire = 2/ attendre = 3)"))
-#   joueur[i] <- readline(prompt = "")
-# }
-# 
-# #eccrire les réponse
-# 
-# #faire tourner la suite du code
-# 
-# 
-# # Ajout de la colonne "joueur" au data frame
-# TABLEAU_ACTIONS$joueur <- joueur
-# 
-# # Affichage du data frame mis à jour
-# TABLEAU_ACTIONS
-# 
-# 
-# 
-# 
-# 
-# # Demander à l'utilisateur d'entrer une valeur 
-# print("Entrez une valeur :")
-# x <- as.numeric(readline())
-# 
-# # Définir une fonction qui utilise la valeur entrée 
-# f <- function() {
-#   resultat <- x * 2
-#   print(resultat)
-# }
-# 
-# # Exécuter la fonction
-# f()
-# 
-# # Demander à l'utilisateur d'entrer une nouvelle valeur
-# # et ré-exécuter la fonction
-# print("Entrez une nouvelle valeur :") 
-# x <- as.numeric(readline()) 
-# f()
