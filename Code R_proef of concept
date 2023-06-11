@@ -772,7 +772,7 @@ print ("Voici la répartition énérgetique de votre base.")
 print(paste0("CHARBON = ", DF_mixenergetique$pourcentage_charbon[1]*100,"%."))
 print(paste0("GAZ = ", DF_mixenergetique$pourcentage_gaz[1]*100,"%."))
 print(paste0("URANIUM = ", DF_mixenergetique$pourcentage_uranium[1]*100,"%."))
-print (" ")
+
 
 ### boutons : analyse energetique (fin)----
 
@@ -783,7 +783,8 @@ listechoix<-c(
   "2 = 100% gaz",
   "3 = 100% uranium",
   "4 = 50% charbon et 50% gaz",
-  "5 = 33% gaz, 33% charbon, 33% uranium"
+  "5 = 33% gaz, 33% charbon, 33% uranium",
+  "6 = 90 % uranium, 10% charbon"
 )
 print("listechoix")
 choixmix <- readline(prompt="Veuillez choisir le numéro proposé")
@@ -821,6 +822,17 @@ if(choixmix > 0 & choixmix < 6) {
       pourcentage_charbon = 0.33,
       pourcentage_gaz = 0.33,
       pourcentage_uranium = 0.33
+    )
+  } else if (choixmix == 6) {
+
+  DF_mixenergetique <- data.frame(
+
+    pourcentage_charbon = 0.1,
+
+    pourcentage_gaz = 0,
+
+    pourcentage_uranium = 0.9
+
     )
   }
 } else {
