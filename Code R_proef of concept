@@ -278,37 +278,37 @@ if(DF_projet_en_cours$projet[4]!= ""){
     numerocolonne<-8+DF_projet_en_cours$etat_avancement.sur.5[4]
     petittableau<- DF_projet_optionsetapestxt%>%filter(Projet == DF_projet_en_cours$projet[4])
     DF_projet_en_cours$Etapes.en.en.cours[4]<- petittableau[1,numerocolonne]
+    
+    
+    #Enleve 1/5 des ressources conditionnés par ce projet
+    DF_EVENEMENT_ressources$Tonnes_Equipements[numerodelaligne] <- DF_EVENEMENT_ressources$Tonnes_Equipements[numerodelaligne] - (DF_projet_conditions_ressources$Tonnes_Equipements[ligne3] / 5)
+    DF_EVENEMENT_ressources$Tonnes_Eau[numerodelaligne] <- DF_EVENEMENT_ressources$Tonnes_Eau[numerodelaligne] - (DF_projet_conditions_ressources$Tonnes_Eau[ligne3] / 5)
+    DF_EVENEMENT_ressources$Tonnes_Nourriture[numerodelaligne] <- DF_EVENEMENT_ressources$Tonnes_Nourriture[numerodelaligne] - (DF_projet_conditions_ressources$Tonnes_Nourriture[ligne3] / 5)
+    DF_EVENEMENT_ressources$Tonnes_Oxygene[numerodelaligne] <- DF_EVENEMENT_ressources$Tonnes_Oxygene[numerodelaligne] - (DF_projet_conditions_ressources$Tonnes_Oxygene[ligne3] / 5)
+    DF_EVENEMENT_ressources$Tonnes_Essence_fusee[numerodelaligne] <- DF_EVENEMENT_ressources$Tonnes_Essence_fusee[numerodelaligne] - (DF_projet_conditions_ressources$Tonnes_Essence_fusee[ligne3] / 5)
+    DF_EVENEMENT_ressources$Unites_Bulldozzer[numerodelaligne] <- DF_EVENEMENT_ressources$Unites_Bulldozzer[numerodelaligne] - (DF_projet_conditions_ressources$Unites_Bulldozzer[ligne3] / 5)
+    DF_EVENEMENT_ressources$Unites_Camions[numerodelaligne] <- DF_EVENEMENT_ressources$Unites_Camions[numerodelaligne] - (DF_projet_conditions_ressources$Unites_Camions[ligne3] / 5)
+    DF_EVENEMENT_ressources$Surface_Habitation[numerodelaligne] <- DF_EVENEMENT_ressources$Surface_Habitation[numerodelaligne] - (DF_projet_conditions_ressources$Surface_Habitation[ligne3] / 5)
+    DF_EVENEMENT_ressources$Surface_Biodome[numerodelaligne] <- DF_EVENEMENT_ressources$Surface_Biodome[numerodelaligne] - (DF_projet_conditions_ressources$Surface_Biodome[ligne3] / 5)
+    DF_EVENEMENT_ressources$Surface_Atelier[numerodelaligne] <- DF_EVENEMENT_ressources$Surface_Atelier[numerodelaligne] - (DF_projet_conditions_ressources$Surface_Atelier[ligne3] / 5)
+    DF_EVENEMENT_ressources$Surface_Total_base[numerodelaligne] <- DF_EVENEMENT_ressources$Surface_Total_base[numerodelaligne] - (DF_projet_conditions_ressources$Surface_Total_base[ligne3] / 5)
+    DF_EVENEMENT_ressources$Unites_Population[numerodelaligne] <- DF_EVENEMENT_ressources$Unites_Population[numerodelaligne] - (DF_projet_conditions_ressources$Unites_Population[ligne3] / 5)
+    DF_EVENEMENT_ressources$Pourcentage_Adhesion_ideologique_soldat[numerodelaligne] <- DF_EVENEMENT_ressources$Pourcentage_Adhesion_ideologique_soldat[numerodelaligne] - (DF_projet_conditions_ressources$Pourcentage_Adhesion_ideologique_soldat[ligne3] / 5)
+    DF_EVENEMENT_ressources$Pourcentage_Adhesion_ideologique_officier[numerodelaligne] <- DF_EVENEMENT_ressources$Pourcentage_Adhesion_ideologique_officier[numerodelaligne] - (DF_projet_conditions_ressources$Pourcentage_Adhesion_ideologique_officier[ligne3] / 5)
+    DF_EVENEMENT_ressources$Pourcentage_Adhesion_ideologique_civil[numerodelaligne] <- DF_EVENEMENT_ressources$Pourcentage_Adhesion_ideologique_civil[numerodelaligne] - (DF_projet_conditions_ressources$Pourcentage_Adhesion_ideologique_civil[ligne3] / 5)
+    DF_EVENEMENT_ressources$Unites_Officier[numerodelaligne] <- DF_EVENEMENT_ressources$Unites_Officier[numerodelaligne] - (DF_projet_conditions_ressources$Unites_Officier[ligne3] / 5)
+    DF_EVENEMENT_ressources$Unites_Civil[numerodelaligne] <- DF_EVENEMENT_ressources$Unites_Civil[numerodelaligne] - (DF_projet_conditions_ressources$Unites_Civil[ligne3] / 5)
+    DF_EVENEMENT_ressources$Unites_Soldats[numerodelaligne] <- DF_EVENEMENT_ressources$Unites_Soldats[numerodelaligne] - (DF_projet_conditions_ressources$Unites_Soldats[ligne3] / 5)
+    DF_EVENEMENT_ressources$Unites_V2[numerodelaligne] <- DF_EVENEMENT_ressources$Unites_V2[numerodelaligne] - (DF_projet_conditions_ressources$Unites_V2[ligne3] / 5)
+    DF_EVENEMENT_ressources$Pourcentage_Detection_Sovietique[numerodelaligne] <- DF_EVENEMENT_ressources$Pourcentage_Detection_Sovietique[numerodelaligne] - (DF_projet_conditions_ressources$Pourcentage_Detection_Sovietique[ligne3] / 5)
+    DF_EVENEMENT_ressources$Pourcentage_Detection_USA[numerodelaligne] <- DF_EVENEMENT_ressources$Pourcentage_Detection_USA[numerodelaligne] - (DF_projet_conditions_ressources$Pourcentage_Detection_USA[ligne3] / 5)
+    DF_EVENEMENT_ressources$Unites_arme_super_puissante[numerodelaligne] <- DF_EVENEMENT_ressources$Unites_arme_super_puissante[numerodelaligne] - (DF_projet_conditions_ressources$Unites_arme_super_puissante[ligne3] / 5)
+    DF_EVENEMENT_ressources$KWperiode_electricite[numerodelaligne] <- DF_EVENEMENT_ressources$KWperiode_electricite[numerodelaligne] - (DF_projet_conditions_ressources$KWperiode_electricite[ligne3] / 5)
+    DF_EVENEMENT_ressources$Tonnes_charbon[numerodelaligne] <- DF_EVENEMENT_ressources$Tonnes_charbon[numerodelaligne] - (DF_projet_conditions_ressources$Tonnes_charbon[ligne3] / 5)
+    DF_EVENEMENT_ressources$Tonnes_uranium[numerodelaligne] <- DF_EVENEMENT_ressources$Tonnes_uranium[numerodelaligne] - (DF_projet_conditions_ressources$Tonnes_uranium[ligne3] / 5)
+    DF_EVENEMENT_ressources$Tonnes_gaz[numerodelaligne] <- DF_EVENEMENT_ressources$Tonnes_gaz[numerodelaligne] - (DF_projet_conditions_ressources$Tonnes_gaz[ligne3] / 5)
+  }
   
-  
-  #Enleve 1/5 des ressources conditionnés par ce projet
-  DF_EVENEMENT_ressources$Tonnes_Equipements[numerodelaligne] <- DF_EVENEMENT_ressources$Tonnes_Equipements[numerodelaligne] - (DF_projet_conditions_ressources$Tonnes_Equipements[ligne3] / 5)
-  DF_EVENEMENT_ressources$Tonnes_Eau[numerodelaligne] <- DF_EVENEMENT_ressources$Tonnes_Eau[numerodelaligne] - (DF_projet_conditions_ressources$Tonnes_Eau[ligne3] / 5)
-  DF_EVENEMENT_ressources$Tonnes_Nourriture[numerodelaligne] <- DF_EVENEMENT_ressources$Tonnes_Nourriture[numerodelaligne] - (DF_projet_conditions_ressources$Tonnes_Nourriture[ligne3] / 5)
-  DF_EVENEMENT_ressources$Tonnes_Oxygene[numerodelaligne] <- DF_EVENEMENT_ressources$Tonnes_Oxygene[numerodelaligne] - (DF_projet_conditions_ressources$Tonnes_Oxygene[ligne3] / 5)
-  DF_EVENEMENT_ressources$Tonnes_Essence_fusee[numerodelaligne] <- DF_EVENEMENT_ressources$Tonnes_Essence_fusee[numerodelaligne] - (DF_projet_conditions_ressources$Tonnes_Essence_fusee[ligne3] / 5)
-  DF_EVENEMENT_ressources$Unites_Bulldozzer[numerodelaligne] <- DF_EVENEMENT_ressources$Unites_Bulldozzer[numerodelaligne] - (DF_projet_conditions_ressources$Unites_Bulldozzer[ligne3] / 5)
-  DF_EVENEMENT_ressources$Unites_Camions[numerodelaligne] <- DF_EVENEMENT_ressources$Unites_Camions[numerodelaligne] - (DF_projet_conditions_ressources$Unites_Camions[ligne3] / 5)
-  DF_EVENEMENT_ressources$Surface_Habitation[numerodelaligne] <- DF_EVENEMENT_ressources$Surface_Habitation[numerodelaligne] - (DF_projet_conditions_ressources$Surface_Habitation[ligne3] / 5)
-  DF_EVENEMENT_ressources$Surface_Biodome[numerodelaligne] <- DF_EVENEMENT_ressources$Surface_Biodome[numerodelaligne] - (DF_projet_conditions_ressources$Surface_Biodome[ligne3] / 5)
-  DF_EVENEMENT_ressources$Surface_Atelier[numerodelaligne] <- DF_EVENEMENT_ressources$Surface_Atelier[numerodelaligne] - (DF_projet_conditions_ressources$Surface_Atelier[ligne3] / 5)
-  DF_EVENEMENT_ressources$Surface_Total_base[numerodelaligne] <- DF_EVENEMENT_ressources$Surface_Total_base[numerodelaligne] - (DF_projet_conditions_ressources$Surface_Total_base[ligne3] / 5)
-  DF_EVENEMENT_ressources$Unites_Population[numerodelaligne] <- DF_EVENEMENT_ressources$Unites_Population[numerodelaligne] - (DF_projet_conditions_ressources$Unites_Population[ligne3] / 5)
-  DF_EVENEMENT_ressources$Pourcentage_Adhesion_ideologique_soldat[numerodelaligne] <- DF_EVENEMENT_ressources$Pourcentage_Adhesion_ideologique_soldat[numerodelaligne] - (DF_projet_conditions_ressources$Pourcentage_Adhesion_ideologique_soldat[ligne3] / 5)
-  DF_EVENEMENT_ressources$Pourcentage_Adhesion_ideologique_officier[numerodelaligne] <- DF_EVENEMENT_ressources$Pourcentage_Adhesion_ideologique_officier[numerodelaligne] - (DF_projet_conditions_ressources$Pourcentage_Adhesion_ideologique_officier[ligne3] / 5)
-  DF_EVENEMENT_ressources$Pourcentage_Adhesion_ideologique_civil[numerodelaligne] <- DF_EVENEMENT_ressources$Pourcentage_Adhesion_ideologique_civil[numerodelaligne] - (DF_projet_conditions_ressources$Pourcentage_Adhesion_ideologique_civil[ligne3] / 5)
-  DF_EVENEMENT_ressources$Unites_Officier[numerodelaligne] <- DF_EVENEMENT_ressources$Unites_Officier[numerodelaligne] - (DF_projet_conditions_ressources$Unites_Officier[ligne3] / 5)
-  DF_EVENEMENT_ressources$Unites_Civil[numerodelaligne] <- DF_EVENEMENT_ressources$Unites_Civil[numerodelaligne] - (DF_projet_conditions_ressources$Unites_Civil[ligne3] / 5)
-  DF_EVENEMENT_ressources$Unites_Soldats[numerodelaligne] <- DF_EVENEMENT_ressources$Unites_Soldats[numerodelaligne] - (DF_projet_conditions_ressources$Unites_Soldats[ligne3] / 5)
-  DF_EVENEMENT_ressources$Unites_V2[numerodelaligne] <- DF_EVENEMENT_ressources$Unites_V2[numerodelaligne] - (DF_projet_conditions_ressources$Unites_V2[ligne3] / 5)
-  DF_EVENEMENT_ressources$Pourcentage_Detection_Sovietique[numerodelaligne] <- DF_EVENEMENT_ressources$Pourcentage_Detection_Sovietique[numerodelaligne] - (DF_projet_conditions_ressources$Pourcentage_Detection_Sovietique[ligne3] / 5)
-  DF_EVENEMENT_ressources$Pourcentage_Detection_USA[numerodelaligne] <- DF_EVENEMENT_ressources$Pourcentage_Detection_USA[numerodelaligne] - (DF_projet_conditions_ressources$Pourcentage_Detection_USA[ligne3] / 5)
-  DF_EVENEMENT_ressources$Unites_arme_super_puissante[numerodelaligne] <- DF_EVENEMENT_ressources$Unites_arme_super_puissante[numerodelaligne] - (DF_projet_conditions_ressources$Unites_arme_super_puissante[ligne3] / 5)
-  DF_EVENEMENT_ressources$KWperiode_electricite[numerodelaligne] <- DF_EVENEMENT_ressources$KWperiode_electricite[numerodelaligne] - (DF_projet_conditions_ressources$KWperiode_electricite[ligne3] / 5)
-  DF_EVENEMENT_ressources$Tonnes_charbon[numerodelaligne] <- DF_EVENEMENT_ressources$Tonnes_charbon[numerodelaligne] - (DF_projet_conditions_ressources$Tonnes_charbon[ligne3] / 5)
-  DF_EVENEMENT_ressources$Tonnes_uranium[numerodelaligne] <- DF_EVENEMENT_ressources$Tonnes_uranium[numerodelaligne] - (DF_projet_conditions_ressources$Tonnes_uranium[ligne3] / 5)
-  DF_EVENEMENT_ressources$Tonnes_gaz[numerodelaligne] <- DF_EVENEMENT_ressources$Tonnes_gaz[numerodelaligne] - (DF_projet_conditions_ressources$Tonnes_gaz[ligne3] / 5)
-}
-
 }
 
 
@@ -318,41 +318,41 @@ if(DF_projet_en_cours$projet[4]!= ""){
 
 for (i in 1:4){
   if(DF_projet_en_cours$etat_avancement.sur.5[i]==5){
-      ligne4 <- which(DF_projet_ress_var_realise$projet == DF_projet_en_cours$projet[i])
-      
-      #on copie les valeurs tu tableau valeurs mensuel au tableau valeur réalisé
-      DF_projet_ress_var_realise$Tonnes_Equipements[ligne4] <- DF_projet_ress_var_mens$Tonnes_Equipements[ligne4]
-      DF_projet_ress_var_realise$Tonnes_Eau[ligne4] <- DF_projet_ress_var_mens$Tonnes_Eau[ligne4]
-      DF_projet_ress_var_realise$Tonnes_Nourriture[ligne4] <- DF_projet_ress_var_mens$Tonnes_Nourriture[ligne4]
-      DF_projet_ress_var_realise$Tonnes_Oxygene[ligne4] <- DF_projet_ress_var_mens$Tonnes_Oxygene[ligne4]
-      DF_projet_ress_var_realise$Tonnes_Essence_fusee[ligne4] <- DF_projet_ress_var_mens$Tonnes_Essence_fusee[ligne4]
-      DF_projet_ress_var_realise$Unites_Bulldozzer[ligne4] <- DF_projet_ress_var_mens$Unites_Bulldozzer[ligne4]
-      DF_projet_ress_var_realise$Unites_Camions[ligne4] <- DF_projet_ress_var_mens$Unites_Camions[ligne4]
-      DF_projet_ress_var_realise$Surface_Habitation[ligne4] <- DF_projet_ress_var_mens$Surface_Habitation[ligne4]
-      DF_projet_ress_var_realise$Surface_Biodome[ligne4] <- DF_projet_ress_var_mens$Surface_Biodome[ligne4]
-      DF_projet_ress_var_realise$Surface_Atelier[ligne4] <- DF_projet_ress_var_mens$Surface_Atelier[ligne4]
-      DF_projet_ress_var_realise$Surface_Total_base[ligne4] <- DF_projet_ress_var_mens$Surface_Total_base[ligne4]
-      DF_projet_ress_var_realise$Unites_Population[ligne4] <- DF_projet_ress_var_mens$Unites_Population[ligne4]
-      DF_projet_ress_var_realise$Pourcentage_Adhesion_ideologique_soldat[ligne4] <- DF_projet_ress_var_mens$Pourcentage_Adhesion_ideologique_soldat[ligne4]
-      DF_projet_ress_var_realise$Pourcentage_Adhesion_ideologique_officier[ligne4] <- DF_projet_ress_var_mens$Pourcentage_Adhesion_ideologique_officier[ligne4]
-      DF_projet_ress_var_realise$Pourcentage_Adhesion_ideologique_civil[ligne4] <- DF_projet_ress_var_mens$Pourcentage_Adhesion_ideologique_civil[ligne4]
-      DF_projet_ress_var_realise$Unites_Officier[ligne4] <- DF_projet_ress_var_mens$Unites_Officier[ligne4]
-      DF_projet_ress_var_realise$Unites_Civil[ligne4] <- DF_projet_ress_var_mens$Unites_Civil[ligne4]
-      DF_projet_ress_var_realise$Unites_Soldats[ligne4] <- DF_projet_ress_var_mens$Unites_Soldats[ligne4]
-      DF_projet_ress_var_realise$Unites_V2[ligne4] <- DF_projet_ress_var_mens$Unites_V2[ligne4]
-      DF_projet_ress_var_realise$Pourcentage_Detection_Sovietique[ligne4] <- DF_projet_ress_var_mens$Pourcentage_Detection_Sovietique[ligne4]
-      DF_projet_ress_var_realise$Pourcentage_Detection_USA[ligne4] <- DF_projet_ress_var_mens$Pourcentage_Detection_USA[ligne4]
-      DF_projet_ress_var_realise$Unites_arme_super_puissante[ligne4] <- DF_projet_ress_var_mens$Unites_arme_super_puissante[ligne4]
-      DF_projet_ress_var_realise$KWperiode_electricite[ligne4] <- DF_projet_ress_var_mens$KWperiode_electricite[ligne4]
-      DF_projet_ress_var_realise$Tonnes_charbon[ligne4] <- DF_projet_ress_var_mens$Tonnes_charbon[ligne4]
-      DF_projet_ress_var_realise$Tonnes_uranium[ligne4] <- DF_projet_ress_var_mens$Tonnes_uranium[ligne4]
-      DF_projet_ress_var_realise$Tonnes_gaz[ligne4] <- DF_projet_ress_var_mens$Tonnes_gaz[ligne4]
-      #on reset les valeurs du tableau tableau en cours
-      
-      DF_projet_en_cours$projet[i]<-""
-      DF_projet_en_cours$options[i]<-""
-      DF_projet_en_cours$etat_avancement.sur.5[i]<-0
-      DF_projet_en_cours$Etapes.en.en.cours[i]<-0
+    ligne4 <- which(DF_projet_ress_var_realise$projet == DF_projet_en_cours$projet[i])
+    
+    #on copie les valeurs tu tableau valeurs mensuel au tableau valeur réalisé
+    DF_projet_ress_var_realise$Tonnes_Equipements[ligne4] <- DF_projet_ress_var_mens$Tonnes_Equipements[ligne4]
+    DF_projet_ress_var_realise$Tonnes_Eau[ligne4] <- DF_projet_ress_var_mens$Tonnes_Eau[ligne4]
+    DF_projet_ress_var_realise$Tonnes_Nourriture[ligne4] <- DF_projet_ress_var_mens$Tonnes_Nourriture[ligne4]
+    DF_projet_ress_var_realise$Tonnes_Oxygene[ligne4] <- DF_projet_ress_var_mens$Tonnes_Oxygene[ligne4]
+    DF_projet_ress_var_realise$Tonnes_Essence_fusee[ligne4] <- DF_projet_ress_var_mens$Tonnes_Essence_fusee[ligne4]
+    DF_projet_ress_var_realise$Unites_Bulldozzer[ligne4] <- DF_projet_ress_var_mens$Unites_Bulldozzer[ligne4]
+    DF_projet_ress_var_realise$Unites_Camions[ligne4] <- DF_projet_ress_var_mens$Unites_Camions[ligne4]
+    DF_projet_ress_var_realise$Surface_Habitation[ligne4] <- DF_projet_ress_var_mens$Surface_Habitation[ligne4]
+    DF_projet_ress_var_realise$Surface_Biodome[ligne4] <- DF_projet_ress_var_mens$Surface_Biodome[ligne4]
+    DF_projet_ress_var_realise$Surface_Atelier[ligne4] <- DF_projet_ress_var_mens$Surface_Atelier[ligne4]
+    DF_projet_ress_var_realise$Surface_Total_base[ligne4] <- DF_projet_ress_var_mens$Surface_Total_base[ligne4]
+    DF_projet_ress_var_realise$Unites_Population[ligne4] <- DF_projet_ress_var_mens$Unites_Population[ligne4]
+    DF_projet_ress_var_realise$Pourcentage_Adhesion_ideologique_soldat[ligne4] <- DF_projet_ress_var_mens$Pourcentage_Adhesion_ideologique_soldat[ligne4]
+    DF_projet_ress_var_realise$Pourcentage_Adhesion_ideologique_officier[ligne4] <- DF_projet_ress_var_mens$Pourcentage_Adhesion_ideologique_officier[ligne4]
+    DF_projet_ress_var_realise$Pourcentage_Adhesion_ideologique_civil[ligne4] <- DF_projet_ress_var_mens$Pourcentage_Adhesion_ideologique_civil[ligne4]
+    DF_projet_ress_var_realise$Unites_Officier[ligne4] <- DF_projet_ress_var_mens$Unites_Officier[ligne4]
+    DF_projet_ress_var_realise$Unites_Civil[ligne4] <- DF_projet_ress_var_mens$Unites_Civil[ligne4]
+    DF_projet_ress_var_realise$Unites_Soldats[ligne4] <- DF_projet_ress_var_mens$Unites_Soldats[ligne4]
+    DF_projet_ress_var_realise$Unites_V2[ligne4] <- DF_projet_ress_var_mens$Unites_V2[ligne4]
+    DF_projet_ress_var_realise$Pourcentage_Detection_Sovietique[ligne4] <- DF_projet_ress_var_mens$Pourcentage_Detection_Sovietique[ligne4]
+    DF_projet_ress_var_realise$Pourcentage_Detection_USA[ligne4] <- DF_projet_ress_var_mens$Pourcentage_Detection_USA[ligne4]
+    DF_projet_ress_var_realise$Unites_arme_super_puissante[ligne4] <- DF_projet_ress_var_mens$Unites_arme_super_puissante[ligne4]
+    DF_projet_ress_var_realise$KWperiode_electricite[ligne4] <- DF_projet_ress_var_mens$KWperiode_electricite[ligne4]
+    DF_projet_ress_var_realise$Tonnes_charbon[ligne4] <- DF_projet_ress_var_mens$Tonnes_charbon[ligne4]
+    DF_projet_ress_var_realise$Tonnes_uranium[ligne4] <- DF_projet_ress_var_mens$Tonnes_uranium[ligne4]
+    DF_projet_ress_var_realise$Tonnes_gaz[ligne4] <- DF_projet_ress_var_mens$Tonnes_gaz[ligne4]
+    #on reset les valeurs du tableau tableau en cours
+    
+    DF_projet_en_cours$projet[i]<-""
+    DF_projet_en_cours$options[i]<-""
+    DF_projet_en_cours$etat_avancement.sur.5[i]<-0
+    DF_projet_en_cours$Etapes.en.en.cours[i]<-0
   }
 }
 
@@ -572,7 +572,7 @@ verifiesiprojetOKavecconditionprojet<-function(projetx){
   x5<- DF_projet_Condtions_projets%>%filter(projet == projetx)%>%pull(Condtions5)
   
   reponseconditions1<- if_else(is.na(x1),1,
-                    if_else(!x1%in%Listedesprojestpasencorelance$projet,1,0))
+                               if_else(!x1%in%Listedesprojestpasencorelance$projet,1,0))
   reponseconditions2<- if_else(is.na(x2),1,
                                if_else(!x2%in%Listedesprojestpasencorelance$projet,1,0))
   reponseconditions3<- if_else(is.na(x3),1,
@@ -626,10 +626,10 @@ if (choixprojetnr >0 & choixprojetnr <= nrow(Listeprojetatester) ) {
   DF_projet_optionsetapestrue$projetlance[ligne] <- DF_projet_optionsetapestrue$projetlance [ligne] + 1
   
   #rajouter dans le tableau qui reprend tout les projets en cours
-
+  
   ligne2<- nrow(DF_projet_en_cours%>%filter(projet == ""))
   DF_projet_en_cours$projet[ligne2]<- choixprojet_txt
-  } else {
+} else {
   print("Le numéro choisi n'existe pas, veuilliez recommencer.")
 }
 ### Bouton créé le projet choisis(fin) ----
@@ -652,30 +652,30 @@ choixoptionnr <- readline(prompt="Veuillez choisir le numéro de l'option propos
 choixoptionnr<-as.integer(choixoptionnr)
 choixoption_txt <- presentationprojet_liste[choixoptionnr]
 if(choixoptionnr==1){
-        ligne<- which(DF_projet_optionsetapestxt$`Option.1.0.-` == choixoption_txt)
-        DF_projet_optionsetapestrue$`Option.1.0.-`[ligne] <- DF_projet_optionsetapestrue$`Option.1.0.-`[ligne] + 1
-        cinqetapesduprojet<-c(
-          DF_projet_optionsetapestxt$`Option.1.1.-`[ligne],
-          DF_projet_optionsetapestxt$`Option.1.2.-`[ligne],
-          DF_projet_optionsetapestxt$`Option.1.3.-`[ligne],
-          DF_projet_optionsetapestxt$`Option.1.4.-`[ligne],
-          DF_projet_optionsetapestxt$`Option.1.5.-`[ligne])
-        
-        #j'enregistre l'option dans projet en cours si c'est option 1
-        DF_projet_en_cours$options[ligne2]<- 1
+  ligne<- which(DF_projet_optionsetapestxt$`Option.1.0.-` == choixoption_txt)
+  DF_projet_optionsetapestrue$`Option.1.0.-`[ligne] <- DF_projet_optionsetapestrue$`Option.1.0.-`[ligne] + 1
+  cinqetapesduprojet<-c(
+    DF_projet_optionsetapestxt$`Option.1.1.-`[ligne],
+    DF_projet_optionsetapestxt$`Option.1.2.-`[ligne],
+    DF_projet_optionsetapestxt$`Option.1.3.-`[ligne],
+    DF_projet_optionsetapestxt$`Option.1.4.-`[ligne],
+    DF_projet_optionsetapestxt$`Option.1.5.-`[ligne])
+  
+  #j'enregistre l'option dans projet en cours si c'est option 1
+  DF_projet_en_cours$options[ligne2]<- 1
 }else{
-        ligne<- which(DF_projet_optionsetapestxt$`Option.2.0.-` == choixoption_txt)
-        DF_projet_optionsetapestrue$`Option.2.0.-`[ligne] <- DF_projet_optionsetapestrue$`Option.2.0.-`[ligne] + 1
-        cinqetapesduprojet<-c(
-          DF_projet_optionsetapestxt$`Option.2.1.-`[ligne],
-          DF_projet_optionsetapestxt$`Option.2.2.-`[ligne],
-          DF_projet_optionsetapestxt$`Option.2.3.-`[ligne],
-          DF_projet_optionsetapestxt$`Option.2.4.-`[ligne],
-          DF_projet_optionsetapestxt$`Option.2.5.-`[ligne])
-        #j'enregistre l'option dans projet en cours si c'est option 2
-        DF_projet_en_cours$options[ligne2]<- 2
-
-        
+  ligne<- which(DF_projet_optionsetapestxt$`Option.2.0.-` == choixoption_txt)
+  DF_projet_optionsetapestrue$`Option.2.0.-`[ligne] <- DF_projet_optionsetapestrue$`Option.2.0.-`[ligne] + 1
+  cinqetapesduprojet<-c(
+    DF_projet_optionsetapestxt$`Option.2.1.-`[ligne],
+    DF_projet_optionsetapestxt$`Option.2.2.-`[ligne],
+    DF_projet_optionsetapestxt$`Option.2.3.-`[ligne],
+    DF_projet_optionsetapestxt$`Option.2.4.-`[ligne],
+    DF_projet_optionsetapestxt$`Option.2.5.-`[ligne])
+  #j'enregistre l'option dans projet en cours si c'est option 2
+  DF_projet_en_cours$options[ligne2]<- 2
+  
+  
 }
 #enregistrement du numéro de l'option et du texte de l'option 
 DF_projet_en_cours$etat_avancement.sur.5[ligne2] <-1
@@ -688,4 +688,144 @@ print(cinqetapesduprojet)
 
 ### boutons : Lancement du projet avec options (fin) ----
 
+### boutons : analyse energetique ----
+print ("Voici une analyse de vos dépenses en énergie")
+print ("CHARBON")
+print (
+  paste(
+    "il vous reste",DF_EVENEMENT_ressources$Tonnes_charbon[numerodelaligne],
+    "tonnes de charbon. La combustion des reserves va nécéssiter ",
+    DF_EVENEMENT_ressources$Tonnes_Oxygene[numerodelaligne]*3,
+    " tonnes d'oxygènes. Il vous reste ",
+    DF_EVENEMENT_ressources$Tonnes_Oxygene[numerodelaligne] ,
+    "tonnes d'oxygènes",
+    "Ces ressources vont vous permettre de produire pour votre base actuelle environ ",
+    DF_EVENEMENT_ressources$Tonnes_charbon[numerodelaligne]*7000,
+    "KW, alors que votre base en consomme ",
+    var_usure_KWperiode_electricite, 
+    "par tour.","Il vous reste donc ",
+    if_else(
+      DF_EVENEMENT_ressources$Tonnes_charbon[numerodelaligne]<0 |
+        DF_EVENEMENT_ressources$Tonnes_Oxygene[numerodelaligne]<0,0,
+      round(
+        (
+          DF_EVENEMENT_ressources$Tonnes_charbon[numerodelaligne]*7000)/
+          var_usure_KWperiode_electricite,0
+      )
+    ),"tour(s) de réserve" )
+)
+
+print (" ")
+print ("GAZ")
+print (
+  paste(
+    "il vous reste",DF_EVENEMENT_ressources$Tonnes_gaz[numerodelaligne],
+    "tonnes de gaz. La combustion des reserves va nécéssiter ",
+    DF_EVENEMENT_ressources$Tonnes_gaz[numerodelaligne]*10,
+    " tonnes d'oxygènes. Il vous reste ",
+    DF_EVENEMENT_ressources$Tonnes_Oxygene[numerodelaligne] ,
+    "tonnes d'oxygènes",
+    "Ces ressources vont vous permettre de produire pour votre base actuelle environ ",
+    DF_EVENEMENT_ressources$Tonnes_gaz[numerodelaligne]*10000,
+    "KW, alors que votre base en consomme ",
+    var_usure_KWperiode_electricite, 
+    "par tour.","Il vous reste donc ",
+    if_else(
+      DF_EVENEMENT_ressources$Tonnes_gaz[numerodelaligne]<0 |
+        DF_EVENEMENT_ressources$Tonnes_Oxygene[numerodelaligne]<0,0,
+      round(
+        (
+          DF_EVENEMENT_ressources$Tonnes_gaz[numerodelaligne]*10000)/
+          var_usure_KWperiode_electricite,0
+      )
+    ),"tour(s) de réserve" )
+)
+
+
+
+print(" ")
+print ("URANIUM")
+print (
+  paste(
+    "il vous reste",DF_EVENEMENT_ressources$Tonnes_uranium[numerodelaligne],
+    "tonnes duranium. La combustion des reserves va nécéssité ",
+    DF_EVENEMENT_ressources$Tonnes_Oxygene[numerodelaligne]*0,
+    " tonnes d'oxygènes. Il vous reste ",
+    DF_EVENEMENT_ressources$Tonnes_Oxygene[numerodelaligne] ,
+    "tonnes d'oxygènes",
+    "Ces ressources vont vous permettre de produire pour votre base actuelle environ ",
+    DF_EVENEMENT_ressources$Tonnes_uranium[numerodelaligne]*20000000,
+    "KW, alors que votre base en consomme ",
+    var_usure_KWperiode_electricite, 
+    "par tour.","Il vous reste donc ",
+    if_else(
+      DF_EVENEMENT_ressources$Tonnes_uranium[numerodelaligne]<0,0,
+      round(
+        (
+          DF_EVENEMENT_ressources$Tonnes_uranium[numerodelaligne]*20000000)/
+          var_usure_KWperiode_electricite,0
+        )
+    ),"tour(s) de réserve" )
+  )
+
+print ("Voici la répartition énérgetique de votre base.")
+print(paste0("CHARBON = ", DF_mixenergetique$pourcentage_charbon[1]*100,"%."))
+print(paste0("GAZ = ", DF_mixenergetique$pourcentage_gaz[1]*100,"%."))
+print(paste0("URANIUM = ", DF_mixenergetique$pourcentage_uranium[1]*100,"%."))
+print (" ")
+
+### boutons : analyse energetique (fin)----
+
+### boutons : choix du mix energetique ----   
+print("merci d'indiquer votre choix de mixenergetique")
+listechoix<-c(
+  "1 = 100% charbon",
+  "2 = 100% gaz",
+  "3 = 100% uranium",
+  "4 = 50% charbon et 50% gaz",
+  "5 = 33% gaz, 33% charbon, 33% uranium"
+)
+print("listechoix")
+choixmix <- readline(prompt="Veuillez choisir le numéro proposé")
+### boutons : choix du mix energetique (fin input)----   
+
+#validation mix energetique ----
+choixmix <- as.integer(choixmix)
+if(choixmix > 0 & choixmix < 6) {
+  if(choixmix == 1) {
+    DF_mixenergetique <- data.frame(
+      pourcentage_charbon = 1,
+      pourcentage_gaz = 0,
+      pourcentage_uranium = 0
+    )
+  } else if (choixmix == 2) {
+    DF_mixenergetique <- data.frame(
+      pourcentage_charbon = 0,
+      pourcentage_gaz = 1,
+      pourcentage_uranium = 0
+    )
+  } else if (choixmix == 3) {
+    DF_mixenergetique <- data.frame(
+      pourcentage_charbon = 0,
+      pourcentage_gaz = 0,
+      pourcentage_uranium = 1
+    )
+  } else if (choixmix == 4) {
+    DF_mixenergetique <- data.frame(
+      pourcentage_charbon = 0.5,
+      pourcentage_gaz = 0.5,
+      pourcentage_uranium = 0
+    )
+  } else if (choixmix == 5) {
+    DF_mixenergetique <- data.frame(
+      pourcentage_charbon = 0.33,
+      pourcentage_gaz = 0.33,
+      pourcentage_uranium = 0.33
+    )
+  }
+} else {
+  print("le choix du mix energetique n'a pas été enregistré, merci de recommencer en indiquant un chiffre entre 1 et 5")
+}
+
+#validation mix energetique (fin) ----
 
