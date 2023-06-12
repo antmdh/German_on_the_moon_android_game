@@ -792,7 +792,7 @@ choixmix <- readline(prompt="Veuillez choisir le numéro proposé")
 
 #validation mix energetique ----
 choixmix <- as.integer(choixmix)
-if(choixmix > 0 & choixmix < 6) {
+if(choixmix > 0 & choixmix <= 6) {
   if(choixmix == 1) {
     DF_mixenergetique <- data.frame(
       pourcentage_charbon = 1,
@@ -824,20 +824,21 @@ if(choixmix > 0 & choixmix < 6) {
       pourcentage_uranium = 0.33
     )
   } else if (choixmix == 6) {
-
-  DF_mixenergetique <- data.frame(
-
-    pourcentage_charbon = 0.1,
-
-    pourcentage_gaz = 0,
-
-    pourcentage_uranium = 0.9
-
+    
+    DF_mixenergetique <- data.frame(
+      
+      pourcentage_charbon = 0.1,
+      
+      pourcentage_gaz = 0,
+      
+      pourcentage_uranium = 0.9
+      
     )
   }
 } else {
-  print("le choix du mix energetique n'a pas été enregistré, merci de recommencer en indiquant un chiffre entre 1 et 5")
+  print("le choix du mix energetique n'a pas été enregistré, merci de recommencer en indiquant un chiffre entre 1 et 6")
 }
 
 #validation mix energetique (fin) ----
+
 
