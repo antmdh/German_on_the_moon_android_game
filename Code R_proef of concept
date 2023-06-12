@@ -786,7 +786,7 @@ listechoix<-c(
   "5 = 33% gaz, 33% charbon, 33% uranium",
   "6 = 90 % uranium, 10% charbon"
 )
-print("listechoix")
+print(listechoix)
 choixmix <- readline(prompt="Veuillez choisir le numéro proposé")
 ### boutons : choix du mix energetique (fin input)----   
 
